@@ -1,4 +1,20 @@
 {
+  "name": "@xq/server",
+  "version": "0.0.1",
+  "description": "server",
+  "main": "./src/*.js",
+  "publishConfig": {
+    "registry": "http://139.196.209.72/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@codeup.aliyun.com:5f59dbed769820a3e8184400/frontend/npm/xq-server.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "leo",
+  "license": "ISC",
   "dependencies": {
     "flyio": "^0.6.14"
   }

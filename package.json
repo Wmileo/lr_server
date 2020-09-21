@@ -1,6 +1,6 @@
 {
   "name": "@xq/server",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "server",
   "main": "./src/*.js",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@codeup.aliyun.com:5f59dbed769820a3e8184400/frontend/npm/xq-server.git"
+    "url": "git@codeup.aliyun.com:5f59dbed769820a3e8184400/frontend/npm/xq_server.git"
   },
   "keywords": [
     "server"

@@ -7,6 +7,7 @@ let authInfo = storage.get(Key_AuthInfo)
 console.log('aaaaa', uni)
 
 
+
 function setInfo(info) {
   authInfo = info
   storage.set(Key_AuthInfo, info)

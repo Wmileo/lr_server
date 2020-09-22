@@ -1,104 +1,149 @@
-/* jshint esversion: 9 */
-import config from '@config'
-import auth from '@/server/auth'
-import params from '@/server/params'
-import toast from '@/utils/toast'
 
-let fly = require('flyio')
+import auth from './auth'
 
-fly.config.baseURL = config.baseURL
+let isUni = typeof(uni) != 'undefined'
+let fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio')
+
+let handleSuccess = (data) => {}
+let handleFail = (code, msg) => {}
+let handelError = (err) => {}
+
 fly.config.timeout = 8000
 
 fly.interceptors.request.use((request) => {
-  let headers = {
-  }
-  if (auth.passList().indexOf(request.url) == -1) {
-    let info = auth.getInfo()
-    Object.assign(headers, info)
-  }
+  let headers = {}
+  Object.assign(headers, auth.headerInfo(request.url))
   request.headers = headers
   return request
 })
 
+function handleData(data) {
+  data.success = data.code == 1
+  if (data.success) {
+    handleSuccess(data)
+    return data
+  } else {
+    handleFail(data.code, data.msg)
+    throw new Error(data.code)
+  }
+}
+
 fly.interceptors.response.use(
-  (response) => {
-    // if (typeof response.data === string) response = JSON.parse(response)
-    let data = response.data
-    data.success = data.code == 1
-    if (data.success) {
-      return data
+  (res) => {
+    let request = res.request
+    if (request.responseType && request.responseType === 'blob') {
+      return res.data
     } else {
-      toast.message.error(`code: ${data.code}\n${data.msg}`)
-      throw new Error(data.code)
+      let data = res.data
+      return handleData(data)
     }
   },
   (err) => {
-    toast.message.error(`status: ${err.status}\n${err.message}`)
+    handelError(err)
   }
 )
 
 class Fetch {
-  constructor () {
-    this.method = 'get'
-    this.path = '/'
+  constructor(param) {
+    this.method = param.method
+    this.path = param.path
     this.data = null
     this.response = null
-    this.isFormData = false
   }
-  fetch (data) {
-    this.data = data
+
+  fixPath(data) {
     if (this.path.indexOf('[') > 0) {
       Object.keys(data).forEach(key => {
         this.path = this.path.replace(`[${key}]`, data[key])
       })
-    } 
-    let options = {
-      parseJson: !this.isFormData,
-    };
+    }
+  }
+
+  url() {
+    return fly.config.baseURL + this.path
+  }
+
+  // 请求
+  fetch(data, options = {}) {
+    this.data = data
+    fixPath(data)
     return fly[this.method](this.path, data, options).then(res => {
       this.response = res
       return res
     })
   }
-  list (data) {
-    return this.fetch(data).then(res => {
-      return res.list
-    })
+
+  // 下载
+  download(data) {
+    if (isUni) {
+      fixPath(data)
+      return new Promise((resolve, reject) => {
+        uni.downloadFile({
+          url: url(), //仅为示例，并非真实的资源
+          success: (res) => {
+            handleSuccess(res.data)
+            resolve(res.data)
+          },
+          fail: (err) => {
+            handelError(err)
+            reject(err)
+          }
+        })
+      })
+    } else {
+      return this.fetch(data, {
+        responseType: 'blob'
+      })
+    }
   }
-  page (num) {
-    this.data.pageNum = num
-    return this.list(this.data)
-  }
-  next () {
-    return this.page(this.response.nextPage)
-  }
-  previous () {
-    return this.page(this.response.prePage)
-  }
-  first () {
-    return this.page(this.response.navigateFirstPage)
-  }
-  last () {
-    return this.page(this.response.navigateLastPage)
+
+  // 上传
+  upload(file, data) {
+    if (isUni) {
+      fixPath(data)
+      return new Promise((resolve, reject) => {
+        uni.uploadFile({
+          url: url(),
+          filePath: file,
+          name: 'file',
+          formData: data,
+          success: (res) => {
+            resolve(handleData(res.data))
+          },
+          fail: (err) => {
+            handelError(err)
+            reject(err)
+          }
+        })
+      })
+    } else {
+      let formData = new FormData()
+      formData.append('file', file)
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key])
+      })
+      return this.fetch(formData)
+    }
   }
 
 }
 
-function fetchs (params) {
-  let fetchs = {}
-  for (let key in params) {
-    let param = params[key]
-    let fetch = new Fetch()
-    fetch.method = param.method
-    fetch.path = param.path
-    fetch.isFormData = param.isFormData
-    fetchs[key] = fetch
-  }
-  return fetchs
+let config = {
+  setBaseURL: (url) => {
+    fly.config.baseURL = url
+  },
+  onSuccess: (func) => {
+    handleSuccess = func
+  },
+  onFail: (func) => {
+    handleFail = func
+  },
+  onError: (func) => {
+    handelError = func
+  },
 }
 
 export default {
-  fetchs,
-  auth,
-  params
+  Fetch,
+  config
 }

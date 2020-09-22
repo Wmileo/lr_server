@@ -1,10 +1,10 @@
 {
   "name": "@xq/server",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "server",
-  "main": "./src/*.js",
+  "main": "index.js",
   "publishConfig": {
-    "registry": "http://139.196.209.72/"
+    "registry": "https://npm.xqkxf.cn/"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "flyio": "^0.6.14"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-plugin-vue": "^6.2.2"
   }
 }

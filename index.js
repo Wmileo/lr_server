@@ -1,5 +1,5 @@
-import auth from 'src/auth'
-import http from 'src/http.js'
+import auth from './src/auth'
+import http from './src/http'
 
 function fetchs (params) {
   let fetchs = {}

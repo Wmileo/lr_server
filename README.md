@@ -12,7 +12,7 @@ api生成器
 * type 请求方式 request download upload
 
 |属性|描述|
-|:|:|
+|-|-|
 |url|服务url|
 |server|服务类别|
 |method|请求方法|

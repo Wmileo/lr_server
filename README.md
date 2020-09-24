@@ -8,7 +8,7 @@
 |url|服务url|
 
 |属性|描述|备注|
-|:-:|:-:|
+|-|-|-|
 |url|服务url||
 |server|服务类别|auth 权限服务maintain 后台管理服务|
 |method|请求方法|get post|

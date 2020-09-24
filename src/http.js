@@ -45,51 +45,40 @@ fly.interceptors.response.use(
 
 class Fetch {
   constructor(api) {
-    this.method = api.method
+    this.api = api
     this.path = api.path
-    this.url = api.url
-    this.server = api.server
-    this.type = api.type
-    
-    this.data = null
-    this.response = null
   }
 
-  fixPath() {
-    console.log('why', this.path)
-    if (this.path.indexOf('[') > 0) {
-      for (let k in this.data) {
-        console.log(k, this.data[k])
-        this.path = this.path.replace(`[${k}]`, this.data[k])
-        console.log(this.path)
+  fixPath(data) {
+    if (this.api.path.indexOf('[') > 0) {
+      for (let k in data) {
+        this.path = this.api.path.replace(`[${k}]`, data[k])
       }
     }
   }
 
-  fetch(data, options = {}) {
-    return this[this.type](data, options)
+  fetch(data) {
+    return this[this.api.type](data)
   }
   
   // 请求
-  request(data, options = {}) {
-    this.data = data
-    console.log(this.data)
-    this.fixPath()
-    Object.assign(options, { baseURL: this.url} )
-    return fly[this.method](this.path, data, options).then(res => {
-      this.response = res
+  request(data, options) {
+    this.fixPath(data)
+    return fly[this.api.method](this.path, data, {
+      ...options,
+      baseURL: this.api.url
+    }).then(res => {
       return res
     })
   }
 
   // 下载
   download(data) {
-    this.data = data
     if (isUni) {
-      this.fixPath()
+      this.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.downloadFile({
-          url: this.url + this.path, //仅为示例，并非真实的资源
+          url: this.api.url + this.path, //仅为示例，并非真实的资源
           success: (res) => {
             handleSuccess(res.data)
             resolve(res.data)
@@ -109,14 +98,13 @@ class Fetch {
 
   // 上传
   upload(data) {
-    this.data = data
     if (isUni) {
       let file = data['file']
       delete data['file']
-      this.fixPath()
+      this.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.uploadFile({
-          url: this.url + this.path,
+          url: this.api.url + this.path,
           filePath: file,
           name: 'file',
           formData: data,

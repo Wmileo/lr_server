@@ -13,25 +13,18 @@ let apiBuilder = {
   },
   upload: (path, method = 'post') => {
     return {method, path, type: 'upload'}
-  }
-}
-
-function fetchs(apis) {
-  let fetchs = {}
-  for (let key in apis) {
-    let api = apis[key]
-    fetchs[key] = () => {
+  },
+  build: (api) => {
+    return () => {
       return new http.Fetch(api)
     }
   }
-  return fetchs
 }
 
 export default {
   config: http.config,
   auth,
-  apiBuilder,
-  fetchs
+  apiBuilder
 }
 
 

@@ -5,15 +5,12 @@ let isUni = typeof(uni) != 'undefined'
 let fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio')
 
 let handleSuccess = (data) => {}
-let handleFail = (code, msg) => {}
+let handleFail = (code, message) => {}
 let handelError = (err) => {}
 
 fly.config.timeout = 8000
 
 fly.interceptors.request.use((request) => {
-  let headers = {}
-  Object.assign(headers, auth.headerInfo(request.url))
-  request.headers = headers
   return request
 })
 
@@ -23,7 +20,7 @@ function handleData(data) {
     handleSuccess(data)
     return data
   } else {
-    handleFail(data.code, data.msg)
+    handleFail(data.code, data.message)
     throw new Error(data.code)
   }
 }
@@ -66,7 +63,8 @@ class Fetch {
     this.fixPath(data)
     return fly[this.api.method](this.path, data, {
       ...options,
-      baseURL: this.api.url
+      baseURL: this.api.url,
+      headers: auth.headerInfo(this.api.path)
     }).then(res => {
       return res
     })
@@ -129,9 +127,6 @@ class Fetch {
 }
 
 let config = {
-  setBaseURL: (url) => {
-    fly.config.baseURL = url
-  },
   onSuccess: (func) => {
     handleSuccess = func
   },

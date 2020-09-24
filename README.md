@@ -19,14 +19,32 @@
 |path|请求路径|加载`data`时，会将`[]`所包含键替换成对应值|
 #### 方法
 ```
-/* 发起请求
+/* 
+ * 发起请求
  * 当请求方式是upload时，data需要包含以file为键，文件为值，uni项目该值为文件路径
  */ 
 fetch(data)
 ```
 
-## 便捷工具
-#### apiBuilder
+## auth
+管理授权相关数据
+#### 方法
+```
+// 存储授权信息
+setInfo(info)
+
+// 清除授权信息
+clear（）
+
+// 获取授权信息
+headerInfo(path)
+
+// 添加免授权接口白名单
+passList.push(path)
+```
+
+## apiBuilder
+
 用于快速生成 api 基础对象（只包含`method`，`path`，`type`）
 ```
 // 普通get请求 {method: 'get', path, type: 'request'}
@@ -47,4 +65,16 @@ upload(path, method = 'post')
 build(api) 
 ```
 
+## config
+配置请求结果处理
+```
+// 配置请求结果成功处理函数
+onSuccess(data => {})
+
+// 配置请求结果失败处理函数
+onFail((code, message) => {})
+
+// 配置请求失败处理函数
+onError((err) => {})
+```
 

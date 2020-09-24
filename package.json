@@ -1,8 +1,8 @@
 {
   "name": "@xq/server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "server",
-  "main": "src/index.js",
+  "main": "index.js",
   "publishConfig": {
     "registry": "https://npm.xqkxf.cn/"
   },

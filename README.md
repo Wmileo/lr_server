@@ -10,3 +10,11 @@ api生成器
 * method 请求方法 get post
 * path 请求路径 
 * type 请求方式 request download upload
+
+|属性|描述|
+|:|:|
+|url|服务url|
+|server|服务类别|
+|method|请求方法|
+|path|请求路径|
+|type|请求方式|

@@ -3,7 +3,6 @@ const kAuthInfo = 'xq_auth_info'
 
 let data = isUni ? uni.getStorageSync(kAuthInfo) : window.localStorage.getItem(kAuthInfo)
 let authInfo = JSON.parse(data)
-console.log('authinfo: ', authInfo)
 
 function setInfo(info) {
   authInfo = info
@@ -11,11 +10,10 @@ function setInfo(info) {
   let key = kAuthInfo
   if (isUni) {
     uni.setStorage({key, data})
-    console.log('uni done')
+    console.log('uni add')
   } else {
     new Promise(() => {
       window.localStorage.setItem(key, data)
-      console.log('ununi done')
     })
   }
 }
@@ -29,7 +27,6 @@ function clear() {
   } else {
     new Promise(() => {
       window.localStorage.removeItem(key)
-      console.log('ununi remove')
     })
   }
 }

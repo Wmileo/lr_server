@@ -1,4 +1,4 @@
-
+/* jshint esversion: 9 */
 import auth from './auth'
 
 let isUni = typeof(uni) != 'undefined'
@@ -44,29 +44,38 @@ fly.interceptors.response.use(
 )
 
 class Fetch {
-  constructor(param) {
-    this.method = param.method
-    this.path = param.path
+  constructor(api) {
+    this.method = api.method
+    this.path = api.path
+    this.url = api.url
+    this.server = api.server
+    this.type = api.type
+    
     this.data = null
     this.response = null
   }
 
-  fixPath(data) {
+  fixPath() {
+    console.log('why', this.path)
     if (this.path.indexOf('[') > 0) {
-      Object.keys(data).forEach(key => {
-        this.path = this.path.replace(`[${key}]`, data[key])
-      })
+      for (let k in this.data) {
+        console.log(k, this.data[k])
+        this.path = this.path.replace(`[${k}]`, this.data[k])
+        console.log(this.path)
+      }
     }
   }
 
-  url() {
-    return fly.config.baseURL + this.path
-  }
-
-  // 请求
   fetch(data, options = {}) {
+    return this[this.type](data, options)
+  }
+  
+  // 请求
+  request(data, options = {}) {
     this.data = data
-    fixPath(data)
+    console.log(this.data)
+    this.fixPath()
+    Object.assign(options, { baseURL: this.url} )
     return fly[this.method](this.path, data, options).then(res => {
       this.response = res
       return res
@@ -75,11 +84,12 @@ class Fetch {
 
   // 下载
   download(data) {
+    this.data = data
     if (isUni) {
-      fixPath(data)
+      this.fixPath()
       return new Promise((resolve, reject) => {
         uni.downloadFile({
-          url: url(), //仅为示例，并非真实的资源
+          url: this.url + this.path, //仅为示例，并非真实的资源
           success: (res) => {
             handleSuccess(res.data)
             resolve(res.data)
@@ -91,19 +101,22 @@ class Fetch {
         })
       })
     } else {
-      return this.fetch(data, {
+      return this.request(data, {
         responseType: 'blob'
       })
     }
   }
 
   // 上传
-  upload(file, data) {
+  upload(data) {
+    this.data = data
     if (isUni) {
-      fixPath(data)
+      let file = data['file']
+      delete data['file']
+      this.fixPath()
       return new Promise((resolve, reject) => {
         uni.uploadFile({
-          url: url(),
+          url: this.url + this.path,
           filePath: file,
           name: 'file',
           formData: data,
@@ -118,11 +131,10 @@ class Fetch {
       })
     } else {
       let formData = new FormData()
-      formData.append('file', file)
-      Object.keys(data).forEach((key) => {
-        formData.append(key, data[key])
-      })
-      return this.fetch(formData)
+      for (let k in data) {
+        formData.append(k, data[k])
+      }
+      return this.request(formData)
     }
   }
 

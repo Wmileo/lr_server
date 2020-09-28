@@ -48,9 +48,11 @@ class Fetch {
 
   fixPath(data) {
     if (this.api.path.indexOf('[') > 0) {
+      let path = this.api.path
       for (let k in data) {
-        this.path = this.api.path.replace(`[${k}]`, data[k])
+        path = path.replace(`[${k}]`, data[k])
       }
+      this.path = path
     }
   }
 

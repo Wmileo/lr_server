@@ -9,6 +9,12 @@ let apiBuilder = {
   post: (path) => {
     return {method: 'post', path, type: 'request'}
   },
+  put: (path) => {
+    return {method: 'put', path, type: 'request'}
+  },
+  delete: (path) => {
+    return {method: 'delete', path, type: 'request'}
+  },
   download: (path, method = 'post') => {
     return {method, path, type: 'download'}
   },

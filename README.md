@@ -1,5 +1,19 @@
 # 请求服务
 
+## server 对象
+
+|属性|描述|
+|-|-|
+|config|配置方法对象|
+|auth|授权操作对象|
+|apiBuilder|api对象生成器|
+
+#### 方法
+```
+// 返回 Image 对象
+image(path)
+```
+
 ## api 对象
 
 |属性|描述|备注|
@@ -26,6 +40,20 @@
 fetch(data)
 ```
 
+## Image 对象
+
+#### 方法
+```
+// 设置图片样式 
+style(name)
+
+// 设置图片宽度，等比缩放
+width(width)
+
+// 设置图片宽高，等比缩放居中，超出裁剪
+size(width, height)
+```
+
 ## auth
 管理授权相关数据
 #### 方法
@@ -34,7 +62,7 @@ fetch(data)
 setInfo(info)
 
 // 清除授权信息
-clear（）
+clear()
 
 // 获取授权信息
 headerInfo(path)
@@ -76,5 +104,8 @@ onFail((code, message) => {})
 
 // 配置请求失败处理函数
 onError((err) => {})
+
+// 配置图片服务
+setImageURL(url)
 ```
 

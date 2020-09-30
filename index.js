@@ -12,7 +12,7 @@ let apiBuilder = {
   put: (path) => {
     return { method: 'put', path, type: 'request' }
   },
-  delete: (path) => {
+  del: (path) => {
     return { method: 'delete', path, type: 'request' }
   },
   download: (path, method = 'post') => {

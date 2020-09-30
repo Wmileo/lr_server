@@ -2,7 +2,7 @@ let isUni = typeof(uni) != 'undefined'
 const kAuthInfo = 'xq_auth_info'
 
 let data = isUni ? uni.getStorageSync(kAuthInfo) : window.localStorage.getItem(kAuthInfo)
-let authInfo = JSON.parse(data)
+let authInfo = data ? JSON.parse(data) : null
 
 function setInfo(info) {
   authInfo = info

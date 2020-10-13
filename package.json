@@ -1,10 +1,10 @@
 {
   "name": "@xq/server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "server",
   "main": "index.js",
   "publishConfig": {
-    "registry": "https://npm.xqkxf.cn/"
+    "registry": "https://npm.xqkxf.com/"
   },
   "repository": {
     "type": "git",

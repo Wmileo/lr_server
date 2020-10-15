@@ -43,7 +43,8 @@ fly.interceptors.response.use(
 class Fetch {
   constructor(api) {
     this.api = api
-    this.path = api.path
+    this.path = api.path //实际路径path
+    this.url = this.api.url + this.path //全路径url
   }
 
   fixPath(data) {
@@ -53,6 +54,7 @@ class Fetch {
         path = path.replace(`[${k}]`, data[k])
       }
       this.path = path
+      this.url = this.api.url + this.path
     }
   }
 
@@ -78,7 +80,7 @@ class Fetch {
       this.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.downloadFile({
-          url: this.api.url + this.path, //仅为示例，并非真实的资源
+          url: this.url,
           success: (res) => {
             handleSuccess(res.data)
             resolve(res.data)
@@ -104,7 +106,7 @@ class Fetch {
       this.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.uploadFile({
-          url: this.api.url + this.path,
+          url: this.url,
           filePath: file,
           name: 'file',
           formData: data,

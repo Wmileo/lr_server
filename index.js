@@ -21,10 +21,17 @@ let apiBuilder = {
   upload: (path, method = 'post') => {
     return { method, path, type: 'upload' }
   },
-  build: (api) => {
-    return () => {
-      return new http.Fetch(api)
+  builders: (apis, extras) => {
+    let bs = {}
+    for (let key in apis) {
+      bs[key] = () => {
+        return new http.Fetch({
+          ...apis[key],
+          ...extras
+        })
+      }
     }
+    return bs
   }
 }
 

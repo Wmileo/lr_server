@@ -15,6 +15,9 @@ let apiBuilder = {
   del: (path) => {
     return { method: 'delete', path, type: 'request' }
   },
+  patch: (path) => {
+    return { method: 'patch', path, type: 'request' }
+  },
   download: (path, method = 'post') => {
     return { method, path, type: 'download' }
   },

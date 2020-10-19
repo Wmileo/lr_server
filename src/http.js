@@ -2,7 +2,8 @@
 import auth from './auth'
 
 let isUni = typeof(uni) != 'undefined'
-let fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio')
+let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/fly.min.js')
+let fly = new Fly()
 
 let handleSuccess = (data) => {}
 let handleFail = (code, message) => {}

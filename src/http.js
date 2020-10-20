@@ -8,10 +8,14 @@ let fly = new Fly()
 let handleSuccess = (data) => {}
 let handleFail = (code, message) => {}
 let handelError = (err) => {}
+let handelNeedRetry = (err, retry) => {}
 
 fly.config.timeout = 8000
 
 fly.interceptors.request.use((request) => {
+  request.headers = {
+    ...auth.headerInfo(request.url),
+  }
   return request
 })
 
@@ -38,6 +42,9 @@ fly.interceptors.response.use(
   },
   (err) => {
     handelError(err)
+    return handelNeedRetry(err, () => {
+      return fly.request(err.request.url, err.request.body, err.request)
+    })
   }
 )
 
@@ -141,6 +148,9 @@ let config = {
   onError: (func) => {
     handelError = func
   },
+  needRetry: (func) => {
+    handelNeedRetry = func
+  }
 }
 
 export default {

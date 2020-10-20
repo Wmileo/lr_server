@@ -10,7 +10,6 @@ function setInfo(info) {
   let key = kAuthInfo
   if (isUni) {
     uni.setStorage({key, data})
-    console.log('uni add')
   } else {
     new Promise(() => {
       window.localStorage.setItem(key, data)
@@ -23,7 +22,6 @@ function clear() {
   let key = kAuthInfo
   if (isUni) {
     uni.removeStorage({key})
-    console.log('uni remove')
   } else {
     new Promise(() => {
       window.localStorage.removeItem(key)

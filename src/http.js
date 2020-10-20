@@ -12,7 +12,7 @@ let handelNeedRetry = (err) => {
   return false
 }
 let handelRetry = (err, retry) => {
-  return new Promise()
+  return retry()
 }
 
 fly.config.timeout = 8000

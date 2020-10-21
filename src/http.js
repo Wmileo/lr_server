@@ -96,6 +96,7 @@ class Fetch {
       return new Promise((resolve, reject) => {
         uni.downloadFile({
           url: this.url,
+          header: auth.headerInfo(this.api.path),
           success: (res) => {
             handleSuccess(res.data)
             resolve(res.data)
@@ -120,13 +121,15 @@ class Fetch {
       delete data['file']
       this.fixPath(data)
       return new Promise((resolve, reject) => {
+        console.log(file,'zhe')
         uni.uploadFile({
           url: this.url,
           filePath: file,
+          header: auth.headerInfo(this.api.path),
           name: 'file',
           formData: data,
           success: (res) => {
-            resolve(handleData(res.data))
+            resolve(handleData(JSON.parse(res.data)))
           },
           fail: (err) => {
             handelError(err)

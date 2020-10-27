@@ -31,7 +31,9 @@ function handleData(data) {
     return data
   } else {
     handleFail(data.code, data.message)
-    throw new Error(data.code)
+    let err = new Error(data.message)
+    err.response = data
+    return Promise.reject(err)
   }
 }
 

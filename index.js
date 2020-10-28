@@ -1,6 +1,6 @@
 import auth from './src/auth'
 import http from './src/http'
-import img from './src/image.js'
+import Image from './src/image.js'
 
 let apiBuilder = {
   get: (path) => {
@@ -39,19 +39,12 @@ let apiBuilder = {
 }
 
 let config = {
-  ...http.config,
-  setImageURL: (url) => {
-    img.setURL(url)
-  }
-}
-
-function image(path) {
-  return img.path(path)
+  ...http.config
 }
 
 export default {
   config,
   auth,
   apiBuilder,
-  image
+  Image
 }

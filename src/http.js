@@ -123,7 +123,6 @@ class Fetch {
       delete data['file']
       this.fixPath(data)
       return new Promise((resolve, reject) => {
-        console.log(file,'zhe')
         uni.uploadFile({
           url: this.url,
           filePath: file,

@@ -1,14 +1,7 @@
-
-let url = null
-
 class Image {
   
-  constructor(path) {
-    if (path.indexOf('http://') == 0 || path.indexOf('https://') == 0) {
-      this.url = path
-    } else {
-      this.url = url + path
-    }
+  constructor(url) {
+    this.url = url
   }
 
   style(name) {
@@ -25,16 +18,4 @@ class Image {
   
 }
 
-function setURL(u) {
-  url = u
-}
-
-function path(path) {
-  return new Image(path)
-}
-
-export default {
-  path,
-  setURL
-}
-
+export default Image

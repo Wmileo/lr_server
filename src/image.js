@@ -1,7 +1,13 @@
 class Image {
   
-  constructor(url) {
-    this.url = url
+  static baseUrl = ''
+  static setBaseUrl(url) {
+    Image.baseUrl = url
+  }
+  
+  constructor(path) {
+    // let url = path.indexOf('/') == 0 ? baseUrl + path : path
+    this.url = path
   }
 
   style(name) {

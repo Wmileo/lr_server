@@ -1,5 +1,5 @@
-import auth from './src/auth'
-import http from './src/http'
+import auth from './auth'
+import http from './http'
 
 let apiBuilder = {
   get: (path) => {

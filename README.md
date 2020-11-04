@@ -20,7 +20,7 @@ image(path)
 |-|-|-|
 |url|服务url||
 |server|服务类别|`auth` 权限服务<br>`maintain` 后台管理服务|
-|method|请求方法|`get` `post`|
+|method|请求方法|`get` `post` `put` `delete` `patch`|
 |path|请求路径||
 |type|请求方式|`request` 发起请求<br>`download` 下载<br>`upload` 上传|
 
@@ -38,20 +38,6 @@ image(path)
  * 当请求方式是upload时，data需要包含以file为键，文件为值，uni项目该值为文件路径
  */ 
 fetch(data)
-```
-
-## Image 对象
-
-#### 方法
-```
-// 设置图片样式 
-style(name)
-
-// 设置图片宽度，等比缩放
-width(width)
-
-// 设置图片宽高，等比缩放居中，超出裁剪
-size(width, height)
 ```
 
 ## auth
@@ -87,10 +73,10 @@ download(path, method = 'post')
 // 上传请求 {method, path, type: 'upload'}
 upload(path, method = 'post') 
 ```
-生成 Fetch 对象
+生成 Fetch 对象集合
 ```
-// 返回一个生成 Fetch 对象的方法
-build(api) 
+// 返回一个生成 Fetch 对象集合的方法， extras 为扩展信息
+builders(apis, extras) 
 ```
 
 ## config
@@ -105,7 +91,10 @@ onFail((code, message) => {})
 // 配置请求失败处理函数
 onError((err) => {})
 
-// 配置图片服务
-setImageURL(url)
+// 配置是否需要重发请求
+needRetry((err) => { return false })
+
+// 配置重发请求触发时机
+onRetry((err, retry) => { return retry() })
 ```
 

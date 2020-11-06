@@ -4,7 +4,7 @@
   "description": "server",
   "main": "src/index.js",
   "publishConfig": {
-    "registry": "https://packages.aliyun.com/5f59dbed769820a3e8184400/npm/npm-registry/"
+    "registry": "https://npm.xqkxf.com/"
   },
   "repository": {
     "type": "git",

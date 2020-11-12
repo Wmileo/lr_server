@@ -71,7 +71,7 @@ class Page {
   }
 
   refresh() { // 刷新列表
-    this.cursor = new Date().getTime() / 1000
+    this.cursor = Math.floor(new Date().getTime() / 1000)
     return this.page(1)
   }
 

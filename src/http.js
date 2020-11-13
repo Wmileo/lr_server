@@ -69,6 +69,10 @@ class Page {
     this.cursor = null // 首次查询时间戳
     this.isAll = false // 是否拉取完
   }
+  
+  handleList(func) {
+    this.handle = func
+  }
 
   refresh() { // 刷新列表
     this.cursor = Math.floor(new Date().getTime() / 1000)
@@ -86,11 +90,15 @@ class Page {
       cursor: this.cursor
     })
     return this.fetch.fetch(data).then(res => {
-      this.total = res.total
+      this.total = res.data.total
       this.nums = Math.ceil(this.total / this.size)
       this.num = num
       this.isAll = this.nums == this.num
-      return res.dataList
+      let list = res.data.dataList
+      if (this.handle) {
+        list = this.handle(list)
+      }
+      return list
     })
   }
 

@@ -57,9 +57,14 @@ let passList = {
   }
 }
 
+function isAuth() {
+  return !!authInfo
+}
+
 export default {
   setInfo,
   headerInfo,
   clear,
-  passList
+  passList,
+  isAuth
 }

@@ -8,11 +8,8 @@ let fly = new Fly()
 let handleSuccess = (data) => {}
 let handleFail = (code, message) => {}
 let handelError = (err) => {}
-let handelNeedRetry = (err) => {
-  return false
-}
-let handelRetry = (err, retry) => {
-  return retry()
+let handelAuth = () => {
+  return Promise.reject(new Error('暂无自动授权操作'))
 }
 
 fly.config.timeout = 8000
@@ -49,8 +46,8 @@ fly.interceptors.response.use(
   },
   (err) => {
     handelError(err)
-    if (handelNeedRetry(err)) {
-      return handelRetry(err, () => {
+    if (err.status == 401) {
+      return handelAuth().then(() => {
         return fly.request(err.request.url, err.request.body, err.request)
       })
     }
@@ -80,6 +77,9 @@ class Page {
   }
 
   more() { // 加载更多
+    if (this.isAll) {
+      return Promise.resolve([])
+    }
     return this.page(this.num + 1)
   }
 
@@ -127,7 +127,13 @@ class Fetch {
   }
 
   fetch(data) {
-    return this[this.api.type](data)
+    if (auth.isAuth()) {
+      return this[this.api.type](data)
+    } else {
+      return handelAuth().then(() => {
+        return this[this.api.type](data)
+      })
+    }
   }
 
   // 请求
@@ -210,11 +216,8 @@ let config = {
   onError: (func) => {
     handelError = func
   },
-  needRetry: (func) => {
-    handelNeedRetry = func
-  },
-  onRetry: (func) => {
-    handelRetry = func
+  onAuth: (func) => {
+    handelAuth = func
   }
 }
 

@@ -127,12 +127,12 @@ class Fetch {
   }
 
   fetch(data) {
-    if (auth.isAuth()) {
-      return this[this.api.type](data)
-    } else {
+    if (auth.needAuth(this.api.path)) {
       return handelAuth().then(() => {
         return this[this.api.type](data)
       })
+    } else {
+      return this[this.api.type](data)
     }
   }
 

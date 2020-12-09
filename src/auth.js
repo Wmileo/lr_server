@@ -57,8 +57,8 @@ let passList = {
   }
 }
 
-function isAuth() {
-  return !!authInfo
+function needAuth(path) {
+  return !authInfo && list.indexOf(path) == -1
 }
 
 export default {
@@ -66,5 +66,5 @@ export default {
   headerInfo,
   clear,
   passList,
-  isAuth
+  needAuth
 }

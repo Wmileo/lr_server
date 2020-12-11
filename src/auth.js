@@ -58,7 +58,11 @@ let passList = {
 }
 
 function needAuth(path) {
-  return !authInfo && list.indexOf(path) == -1
+  if (path) {
+    return !authInfo && list.indexOf(path) == -1
+  } else {
+    return !authInfo
+  }
 }
 
 export default {

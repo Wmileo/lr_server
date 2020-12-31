@@ -36,7 +36,7 @@ function handleData(data) {
 
 function log(method, url, body, data) {
   console.log(`xq-server: ------------------------`)
-  console.log(`xq-server: $(method) : ${url}`)
+  console.log(`xq-server: ${method} : ${url}`)
   console.log(`xq-server: body : `, body)
   console.log(`xq-server: data : `, data)
 }

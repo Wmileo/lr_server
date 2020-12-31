@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@xq/server@1.1.1":
+  version "1.1.1"
+  resolved "https://npm.xqkxf.com/@xq%2fserver/-/server-1.1.1.tgz#d703621e38cd24b1714b2102cd5308867d2ef0c0"
+  integrity sha512-r4ppmk85MLEi+A3hGb88UR6piDcDMHO2V+586qj22PK23d4+n3woD61FuTG9ypoy2jarkxY5Pcle6aTnqdU0Ng==
+  dependencies:
+    flyio "^0.6.14"
+
 ajv@^6.12.3:
   version "6.12.5"
   resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.5.tgz#19b0e8bae8f476e5ba666300387775fb1a00a4da"

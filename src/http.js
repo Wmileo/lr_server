@@ -34,9 +34,16 @@ function handleData(data) {
   }
 }
 
+function log(method, url, body, data) {
+  console.info(`xq-server: ${method} : %{url}`)
+  console.info(`xq-server: body : %{body}`)
+  console.info(`xq-server: data : %{data}`)
+}
+
 fly.interceptors.response.use(
   (res) => {
     let request = res.request
+    log(request.method, request.baseURL + request.url, request.body, res.data)
     if (request.responseType && request.responseType === 'blob') {
       return res.data
     } else {
@@ -46,6 +53,8 @@ fly.interceptors.response.use(
   },
   (err) => {
     handelError(err)
+    let request = err.request
+    log(request.method, request.baseURL + request.url, request.body, err)
     if (err.status == 401) {
       return handelAuth().then(() => {
         return fly.request(err.request.url, err.request.body, err.request)
@@ -157,10 +166,12 @@ class Fetch {
           url: this.url,
           header: auth.headerInfo(this.api.path),
           success: (res) => {
+            log('download', this.url, '', res.data)
             handleSuccess(res.data)
             resolve(res.data)
           },
           fail: (err) => {
+            log('download', this.url, '', err)
             handelError(err)
             reject(err)
           }
@@ -188,8 +199,10 @@ class Fetch {
           formData: data,
           success: (res) => {
             resolve(handleData(JSON.parse(res.data)))
+            log('upload', this.url, file, res.data)
           },
           fail: (err) => {
+            log('upload', this.url, file, err)
             handelError(err)
             reject(err)
           }

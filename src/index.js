@@ -42,17 +42,17 @@ let config = {
   ...http.config
 }
 
-let fetchs = {}
+let fets = {}
 
 function setFetchs(fs, ext) {
   for (let key in fs) {
   	const apis = fs[key]
-    if (!fetchs[key]) {
-      fetchs[key] = {}
+    if (!fets[key]) {
+      fets[key] = {}
     }
-    Object.assign(fetchs[key], builders(apis, ext))
+    Object.assign(fets[key], builders(apis, ext))
   }
-  console.log("fetchs :", fetchs)
+  console.log("fetchs :", fets)
 }
 
 export default {
@@ -61,4 +61,4 @@ export default {
   apiBuilder,
   setFetchs
 }
-export let Fetchs = fetchs
+export let fetchs = fets

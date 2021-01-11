@@ -52,13 +52,12 @@ function setFetchs(fs, ext) {
     }
     Object.assign(fets[key], builders(apis, ext))
   }
-  console.log("fetchs :", fets)
 }
 
 let codes = {}
 
 function setCodes(cs) {
-  
+  Object.assign(codes, cs)
 }
 
 export default {

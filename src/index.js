@@ -22,27 +22,43 @@ let apiBuilder = {
   },
   upload: (path, method = 'post') => {
     return { method, path, type: 'upload' }
-  },
-  builders: (apis, extras) => {
-    let bs = {}
-    for (let key in apis) {
-      bs[key] = () => {
-        return new http.Fetch({
-          ...apis[key],
-          ...extras
-        })
-      }
-    }
-    return bs
   }
+}
+
+function builders(apis, extras) {
+  let bs = {}
+  for (let key in apis) {
+    bs[key] = () => {
+      return new http.Fetch({
+        ...apis[key],
+        ...extras
+      })
+    }
+  }
+  return bs
 }
 
 let config = {
   ...http.config
 }
 
+let fetchs = {}
+
+function setFetchs(fs, ext) {
+  for (let key in fs) {
+  	const apis = fs[key]
+    if (!fetchs[key]) {
+      fetchs[key] = {}
+    }
+    Object.assign(fetchs[key], builders(apis, ext))
+  }
+  console.log("fetchs :", fetchs)
+}
+
 export default {
   config,
   auth,
   apiBuilder,
+  setFetchs
 }
+export let Fetchs = fetchs

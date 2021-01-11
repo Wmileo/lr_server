@@ -55,10 +55,19 @@ function setFetchs(fs, ext) {
   console.log("fetchs :", fets)
 }
 
+let codes = {}
+
+function setCodes(cs) {
+  
+}
+
 export default {
   config,
   auth,
   apiBuilder,
-  setFetchs
+  setFetchs,
+  setCodes
 }
+
 export let fetchs = fets
+export let fetchCode = codes

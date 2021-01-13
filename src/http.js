@@ -36,10 +36,10 @@ function handleData(data) {
 }
 
 function log(method, url, body, data) {
-  $log.info('server', `: ------------------------`)
-  $log.info('server', `: ${method} : ${url}`)
-  $log.info('server', `: body : `, body)
-  $log.info('server', `: data : `, data)
+  $log.info('server', `data `, data)
+  $log.info('server', `body `, body)
+  $log.info('server', `${method} ${url}`)
+  $log.info('server', `------------------------`)
 }
 
 fly.interceptors.response.use(

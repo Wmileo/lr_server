@@ -1,5 +1,6 @@
 /* jshint esversion: 9 */
 import auth from './auth'
+import $log from '@xq/log'
 
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
@@ -35,10 +36,10 @@ function handleData(data) {
 }
 
 function log(method, url, body, data) {
-  console.log(`xq-server: ------------------------`)
-  console.log(`xq-server: ${method} : ${url}`)
-  console.log(`xq-server: body : `, body)
-  console.log(`xq-server: data : `, data)
+  $log.info('server', `: ------------------------`)
+  $log.info('server', `: ${method} : ${url}`)
+  $log.info('server', `: body : `, body)
+  $log.info('server', `: data : `, data)
 }
 
 fly.interceptors.response.use(

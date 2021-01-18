@@ -54,10 +54,40 @@ function setFetchs(fs, ext) {
   }
 }
 
+function code(obj) {
+  return {
+    object() {
+      return obj
+    },
+    array(keys) {
+      let arr = []
+      let ks = keys || Object.keys(obj)
+      for (let k of ks) {
+        arr.push({
+          key:k,
+          value:obj[k]
+        })
+      }
+      return arr
+    }
+  }
+}
+
 $code = {}
 
 function setCodes(cs) {
-  Object.assign($code, cs)
+  for (let key in cs) {
+  	let cds = cs[key]
+    if (!$code[key]) {
+      $code[key] = {}
+    }
+    for (let k of Object.keys(cds)) {
+      cds[k] = code(cds[k])
+    }
+    Object.assign($code[key], cds)
+  }
+  console.log($code)
+  // Object.assign($code, cs)
 }
 
 export default {

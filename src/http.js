@@ -1,6 +1,5 @@
 /* jshint esversion: 9 */
 import auth from './auth'
-import $log from '@xq/log'
 
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
@@ -168,9 +167,9 @@ class Fetch {
           url: this.url,
           header: auth.headerInfo(this.api.path),
           success: (res) => {
-            log('download', this.url, '', res.data)
-            handleSuccess(res.data)
-            resolve(res.data)
+            log('download', this.url, '', res)
+            handleSuccess(res)
+            resolve(res)
           },
           fail: (err) => {
             log('download', this.url, '', err)

@@ -59,6 +59,9 @@ function code(obj) {
     object() {
       return obj
     },
+    value(key) {
+      return obj[key]
+    },
     array(keys) {
       let arr = []
       let ks = keys || Object.keys(obj)
@@ -86,8 +89,6 @@ function setCodes(cs) {
     }
     Object.assign($code[key], cds)
   }
-  console.log($code)
-  // Object.assign($code, cs)
 }
 
 export default {

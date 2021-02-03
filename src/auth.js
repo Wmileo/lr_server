@@ -6,7 +6,7 @@ let authInfo = null
 try {
   authInfo = JSON.parse(data)
 } catch (e) {
-  $log.warn('本地授权数据出错', data)
+  console.info('本地暂无有效授权数据', data)
 }
 
 function setInfo(info) {

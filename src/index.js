@@ -62,13 +62,13 @@ function code(obj) {
     value(key) {
       return obj[key]
     },
-    array(keys) {
+    array(keys, key = 'key', value = 'value') {
       let arr = []
       let ks = keys || Object.keys(obj)
       for (let k of ks) {
         arr.push({
-          key:k,
-          value:obj[k]
+          key: k,
+          value: obj[k]
         })
       }
       return arr

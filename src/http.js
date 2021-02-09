@@ -133,13 +133,13 @@ class Fetch {
     return new Page(this, data, size)
   }
 
-  fetch(data) {
+  fetch(data, opt) {
     if (auth.needAuth(this.api.path)) {
       return handelAuth().then(() => {
-        return this[this.api.type](data)
+        return this[this.api.type](data, opt)
       })
     } else {
-      return this[this.api.type](data)
+      return this[this.api.type](data, opt)
     }
   }
 

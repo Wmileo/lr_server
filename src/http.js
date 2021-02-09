@@ -101,7 +101,7 @@ class Page {
       this.nums = Math.ceil(this.total / this.size)
       this.num = num
       this.isAll = this.nums == this.num
-      let list = res.data.dataList
+      let list = res.data.dataList || []
       if (this.handle) {
         list = this.handle(list)
       }

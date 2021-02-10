@@ -144,10 +144,10 @@ class Fetch {
   }
 
   // 请求
-  request(data, options) {
+  request(data, opt) {
     this.fixPath(data)
     return fly[this.api.method](this.path, data, {
-      ...options,
+      ...opt,
       baseURL: this.api.url,
       headers: auth.headerInfo(this.api.path)
     }).then(res => {
@@ -156,7 +156,7 @@ class Fetch {
   }
 
   // 下载
-  download(data) {
+  download(data, opt) {
     if (isUni) {
       this.fixPath(data)
       return new Promise((resolve, reject) => {
@@ -177,13 +177,14 @@ class Fetch {
       })
     } else {
       return this.request(data, {
+        ...opt,
         responseType: 'blob'
       })
     }
   }
 
   // 上传
-  upload(data) {
+  upload(data, opt) {
     if (isUni) {
       let file = data['file']
       delete data['file']
@@ -211,7 +212,7 @@ class Fetch {
       for (let k in data) {
         formData.append(k, data[k])
       }
-      return this.request(formData)
+      return this.request(formData, opt)
     }
   }
 

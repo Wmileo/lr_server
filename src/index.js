@@ -66,10 +66,10 @@ function code(obj) {
       let arr = []
       let ks = keys || Object.keys(obj)
       for (let k of ks) {
-        arr.push({
-          key: k,
-          value: obj[k]
-        })
+        let data = {}
+        data[key] = k
+        data[value] = obj[k]
+        arr.push(data)
       }
       return arr
     }

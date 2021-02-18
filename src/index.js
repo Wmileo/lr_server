@@ -65,9 +65,13 @@ function code(obj) {
     array(keys, key = 'key', value = 'value') {
       let arr = []
       let ks = keys || Object.keys(obj)
+      let isKeyNum = obj['__keytype__'] == 'number'
       for (let k of ks) {
+        if (k == '__keytype__') {
+          continue
+        }
         let data = {}
-        data[key] = k
+        data[key] = isKeyNum ? Number(k) : k
         data[value] = obj[k]
         arr.push(data)
       }

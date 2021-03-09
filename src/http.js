@@ -46,7 +46,13 @@ fly.interceptors.response.use(
       return res.data
     } else {
       let data = res.data
-      return handleData(data)
+      if (data.code == 401) {
+        return handelAuth().then(() => {
+          return fly.request(err.request.url, err.request.body, err.request)
+        })
+      } else {
+        return handleData(data)
+      }
     }
   },
   (err) => {

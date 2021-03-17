@@ -22,13 +22,14 @@ fly.interceptors.request.use((request) => {
 })
 
 function handleData(data) {
-  data.success = data.code == 1
+  data.success = data.code === '1'
   if (data.success) {
     handleSuccess(data)
     return data
   } else {
     handleFail(data.code, data.message)
     let err = new Error(data.message)
+    err.code = data.code
     err.response = data
     return Promise.reject(err)
   }

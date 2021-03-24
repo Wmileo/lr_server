@@ -44,6 +44,14 @@ fly.interceptors.response.use(
     let request = res.request
     log(request.method, request.baseURL + request.url, request.body, res.data)
     if (request.responseType && request.responseType === 'blob') {
+			if (res.data.type === 'application/json') {
+				let reader = new FileReader()
+				reader.readAsText(res.data)
+				reader.onload = e => {
+					handleData(JSON.parse(e.target.result))
+				}
+				return Promise.reject()
+			}
       return res.data
     } else {
       let data = res.data

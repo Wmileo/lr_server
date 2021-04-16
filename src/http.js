@@ -13,6 +13,7 @@ let handleAuth = () => {
   return Promise.reject(new Error('暂无自动授权操作'))
 }
 let handleConfig = () => {
+  config.finish()
   return Promise.resolve()
 }
 

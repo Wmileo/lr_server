@@ -1,5 +1,6 @@
 /* jshint esversion: 9 */
 import auth from './auth'
+import config from './config'
 
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
@@ -7,9 +8,12 @@ let fly = new Fly()
 
 let handleSuccess = (data) => {}
 let handleFail = (code, message) => {}
-let handelError = (err) => {}
-let handelAuth = () => {
+let handleError = (err) => {}
+let handleAuth = () => {
   return Promise.reject(new Error('暂无自动授权操作'))
+}
+let handleConfig = () => {
+  return Promise.resolve()
 }
 
 fly.config.timeout = 8000
@@ -56,7 +60,7 @@ fly.interceptors.response.use(
     } else {
       let data = res.data
       if (data.code == 401) {
-        return handelAuth().then(() => {
+        return handleAuth().then(() => {
           return fly.request(request.url, request.body, request)
         })
       } else {
@@ -65,11 +69,11 @@ fly.interceptors.response.use(
     }
   },
   (err) => {
-    handelError(err)
+    handleError(err)
     let request = err.request
     log(request.method, request.baseURL + request.url, request.body, err)
     if (err.status == 401) {
-      return handelAuth().then(() => {
+      return handleAuth().then(() => {
         return fly.request(request.url, request.body, request)
       })
     }
@@ -150,12 +154,16 @@ class Fetch {
 
   fetch(data, opt) {
     if (auth.needAuth(this.api.path)) {
-      return handelAuth().then(() => {
-        return this[this.api.type](data, opt)
+      return handleAuth().then(() => {
+        return this.fetch(data, opt)
       })
-    } else {
-      return this[this.api.type](data, opt)
     }
+    if (config.needConfig(this.api.path)) {
+      return handleConfig().then(() => {
+        return this.fetch(data, opt)
+      })
+    }
+    return this[this.api.type](data, opt)
   }
 
   // 请求
@@ -185,7 +193,7 @@ class Fetch {
           },
           fail: (err) => {
             log('download', this.url, '', err)
-            handelError(err)
+            handleError(err)
             reject(err)
           }
         })
@@ -217,7 +225,7 @@ class Fetch {
           },
           fail: (err) => {
             log('upload', this.url, file, err)
-            handelError(err)
+            handleError(err)
             reject(err)
           }
         })
@@ -233,7 +241,7 @@ class Fetch {
 
 }
 
-let config = {
+let http = {
   onSuccess: (func) => {
     handleSuccess = func
   },
@@ -241,14 +249,17 @@ let config = {
     handleFail = func
   },
   onError: (func) => {
-    handelError = func
+    handleError = func
   },
   onAuth: (func) => {
-    handelAuth = func
+    handleAuth = func
+  },
+  onConfig: (func) => {
+    handleConfig = func
   }
 }
 
 export default {
   Fetch,
-  config
+  http
 }

@@ -1,27 +1,56 @@
 import auth from './auth'
+import config from './config'
 import http from './http'
 
 let apiBuilder = {
   get: (path) => {
-    return { method: 'get', path, type: 'request' }
+    return {
+      method: 'get',
+      path,
+      type: 'request'
+    }
   },
   post: (path) => {
-    return { method: 'post', path, type: 'request' }
+    return {
+      method: 'post',
+      path,
+      type: 'request'
+    }
   },
   put: (path) => {
-    return { method: 'put', path, type: 'request' }
+    return {
+      method: 'put',
+      path,
+      type: 'request'
+    }
   },
   del: (path) => {
-    return { method: 'delete', path, type: 'request' }
+    return {
+      method: 'delete',
+      path,
+      type: 'request'
+    }
   },
   patch: (path) => {
-    return { method: 'patch', path, type: 'request' }
+    return {
+      method: 'patch',
+      path,
+      type: 'request'
+    }
   },
   download: (path, method = 'post') => {
-    return { method, path, type: 'download' }
+    return {
+      method,
+      path,
+      type: 'download'
+    }
   },
   upload: (path, method = 'post') => {
-    return { method, path, type: 'upload' }
+    return {
+      method,
+      path,
+      type: 'upload'
+    }
   }
 }
 
@@ -38,15 +67,11 @@ function builders(apis, extras) {
   return bs
 }
 
-let config = {
-  ...http.config
-}
-
 $fetch = {}
 
 function setFetchs(fs, ext) {
   for (let key in fs) {
-  	const apis = fs[key]
+    const apis = fs[key]
     if (!$fetch[key]) {
       $fetch[key] = {}
     }
@@ -84,7 +109,7 @@ $code = {}
 
 function setCodes(cs) {
   for (let key in cs) {
-  	let cds = cs[key]
+    let cds = cs[key]
     if (!$code[key]) {
       $code[key] = {}
     }
@@ -96,11 +121,13 @@ function setCodes(cs) {
 }
 
 export default {
-  
+  http: {
+    ...http.http
+  },
   config,
   auth,
   apiBuilder,
-  
+
   setFetchs,
   setCodes
 }

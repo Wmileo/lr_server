@@ -21,7 +21,12 @@ function needConfig(path) {
   return false
 }
 
+function finish() {
+  isConfig = true
+}
+
 export default {
   passList,
-  needConfig
+  needConfig,
+  finish
 }

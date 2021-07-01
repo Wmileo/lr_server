@@ -1,4 +1,5 @@
 import config from './config';
+import auth from './auth';
 
 
 let handleSuccess = (data, server) => {}

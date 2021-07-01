@@ -42,7 +42,6 @@ function handleResponseRes(fly, res) {
 function handleResponseErr(fly, err) {
   handleError(err)
   let request = err.request
-  log(request.method, request.baseURL + request.url, request.body, err)
   if (err.status == 401) {
     return handleAuth().then(() => {
       return fly.request(request.url, request.body, request)

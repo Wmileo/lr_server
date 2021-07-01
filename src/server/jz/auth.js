@@ -46,7 +46,7 @@ function clear() {
 let list = []
 
 function guid() {
-  let udid = $storage.get('jz_udid')
+  let udid = $storage._get('jz_udid')
   if (udid) {
     return udid
   }
@@ -55,7 +55,7 @@ function guid() {
       v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
-  $storage.set('jz_udid', udid)
+  $storage._set('jz_udid', udid)
   return udid
 }
 

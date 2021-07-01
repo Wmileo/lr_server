@@ -13,7 +13,7 @@ function config(name) {
   if (name == 'jz') {
     return jzServer.config
   }
-  return xqServer.auth
+  return xqServer.config
 }
 
 let isUni = typeof(uni) != 'undefined'

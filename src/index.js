@@ -128,9 +128,9 @@ export default {
   config: {
     passList(server) {
       if (server == 'jz') {
-        return jzServer.passList
+        return jzServer.config.passList
       } else {
-        return xqServer.passList
+        return xqServer.config.passList
       }
     }
   },
@@ -144,9 +144,9 @@ export default {
     },
     passList(server) {
       if (server == 'jz') {
-        return jzServer.passList
+        return jzServer.auth.passList
       } else {
-        return xqServer.passList
+        return xqServer.auth.passList
       }
     }
   },

@@ -93,5 +93,6 @@ export default {
   headerInfo,
   clear,
   passList,
-  needAuth
+  needAuth,
+  guid
 }

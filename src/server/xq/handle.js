@@ -80,10 +80,22 @@ export default {
   handleResponseRes,
   handleResponseErr,
   handleData,
-  handleSuccess,
-  handleFail,
-  handleError,
-  handleAuth,
-  handleConfig,
+  
+  handleSuccess: (data, server) => {
+    handleSuccess(data, server)
+  },
+  handleFail: (code, message, server) => {
+    handleFail(code, message, server)
+  },
+  handleError: (err, server) => {
+    handleError(err, server)
+  },
+  handleAuth: (server) => {
+    return handleAuth(server)
+  },
+  handleConfig: (server) => {
+    return handleConfig(server)
+  },
+  
   setup
 }

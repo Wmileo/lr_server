@@ -1,5 +1,6 @@
-import auth from './auth'
-import config from './config'
+import xqServer from './server/xq/index.js'
+import jzServer from './server/jz/index.js'
+
 import http from './http'
 
 let apiBuilder = {
@@ -124,8 +125,31 @@ export default {
   http: {
     ...http.http
   },
-  config,
-  auth,
+  config: {
+    passList(server) {
+      if (server == 'jz') {
+        return jzServer.passList
+      } else {
+        return xqServer.passList
+      }
+    }
+  },
+  auth: {
+    setInfo(info, server){
+      if (server == 'jz') {
+        jzServer.auth.setInfo(info)
+      } else {
+        xqServer.auth.setInfo(info)
+      }
+    },
+    passList(server) {
+      if (server == 'jz') {
+        return jzServer.passList
+      } else {
+        return xqServer.passList
+      }
+    }
+  },
   apiBuilder,
 
   setFetchs,

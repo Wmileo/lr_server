@@ -1,6 +1,20 @@
 /* jshint esversion: 9 */
-import auth from './auth'
-import config from './config'
+import xqServer from './server/xq/index.js'
+import jzServer from './server/jz/index.js'
+
+function auth(name) {
+  if (name == 'jz') {
+    return jzServer.auth
+  }
+  return xqServer.auth
+}
+
+function config(name) {
+  if (name == 'jz') {
+    return jzServer.config
+  }
+  return xqServer.auth
+}
 
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
@@ -9,22 +23,22 @@ let fly = new Fly()
 let handleSuccess = (data) => {}
 let handleFail = (code, message) => {}
 let handleError = (err) => {}
-let handleAuth = () => {
+let handleAuth = (name) => {
   return Promise.reject(new Error('暂无自动授权操作'))
 }
-let handleConfig = () => {
-  config.finish()
+let handleConfig = (name) => {
+  config(name).finish()
   return Promise.resolve()
 }
 
 fly.config.timeout = 8000
 
-fly.interceptors.request.use((request) => {
-  request.headers = {
-    ...auth.headerInfo(request.url),
-  }
-  return request
-})
+// fly.interceptors.request.use((request) => {
+//   request.headers = {
+//     ...auth.headerInfo(request.url),
+//   }
+//   return request
+// })
 
 function handleData(data) {
   data.success = data.code === '1'
@@ -154,12 +168,12 @@ class Fetch {
   }
 
   fetch(data, opt) {
-    if (auth.needAuth(this.api.path)) {
+    if (auth(this.api.server).needAuth(this.api.path)) {
       return handleAuth().then(() => {
         return this.fetch(data, opt)
       })
     }
-    if (config.needConfig(this.api.path)) {
+    if (config(this.api.server).needConfig(this.api.path)) {
       return handleConfig().then(() => {
         return this.fetch(data, opt)
       })
@@ -173,7 +187,7 @@ class Fetch {
     return fly[this.api.method](this.path, data, {
       ...opt,
       baseURL: this.api.url,
-      headers: auth.headerInfo(this.api.path)
+      headers: auth(this.api.server).headerInfo(this.api.path)
     }).then(res => {
       return res
     })
@@ -186,7 +200,7 @@ class Fetch {
       return new Promise((resolve, reject) => {
         uni.downloadFile({
           url: this.url,
-          header: auth.headerInfo(this.api.path),
+          header: auth(this.api.server).headerInfo(this.api.path),
           success: (res) => {
             log('download', this.url, '', res)
             handleSuccess(res)
@@ -217,7 +231,7 @@ class Fetch {
         uni.uploadFile({
           url: this.url,
           filePath: file,
-          header: auth.headerInfo(this.api.path),
+          header: auth(this.api.server).headerInfo(this.api.path),
           name: 'file',
           formData: data,
           success: (res) => {

@@ -2,57 +2,37 @@
 import xqServer from './server/xq/index.js'
 import jzServer from './server/jz/index.js'
 
-function auth(name) {
-  if (name == 'jz') {
+function auth(server) {
+  if (server == 'jz') {
     return jzServer.auth
   }
   return xqServer.auth
 }
 
-function config(name) {
-  if (name == 'jz') {
+function config(server) {
+  if (server == 'jz') {
     return jzServer.config
   }
   return xqServer.config
+}
+
+function handle(server) {
+  if (server == 'jz') {
+    return jzServer.handle
+  }
+  return xqServer.handle
 }
 
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
 let fly = new Fly()
 
-let handleSuccess = (data) => {}
-let handleFail = (code, message) => {}
-let handleError = (err) => {}
-let handleAuth = (name) => {
-  return Promise.reject(new Error('暂无自动授权操作'))
-}
-let handleConfig = (name) => {
-  config(name).finish()
-  return Promise.resolve()
-}
-
 fly.config.timeout = 8000
 
-// fly.interceptors.request.use((request) => {
-//   request.headers = {
-//     ...auth.headerInfo(request.url),
-//   }
-//   return request
-// })
-
-function handleData(data) {
-  data.success = data.code === '1'
-  if (data.success) {
-    handleSuccess(data)
-    return data
-  } else {
-    handleFail(data.code, data.message)
-    let err = new Error(data.message)
-    err.code = data.code
-    err.response = data
-    return Promise.reject(err)
-  }
-}
+fly.interceptors.request.use((request) => {
+  let server = request.headers.server
+  return handle(server).handlerequest(request)
+})
 
 function log(method, url, body, data) {
   $log.info('server', `${url} (${method})`, { req: body, res: data})
@@ -61,37 +41,27 @@ function log(method, url, body, data) {
 fly.interceptors.response.use(
   (res) => {
     let request = res.request
+    let server = request.headers.server
     log(request.method, request.baseURL + request.url, request.body, res.data)
     if (request.responseType && request.responseType === 'blob') {
 			if (res.data.type === 'application/json') {
 				let reader = new FileReader()
 				reader.readAsText(res.data)
 				reader.onload = e => {
-					handleData(JSON.parse(e.target.result))
+					handle(server).handleData(JSON.parse(e.target.result))
 				}
 				return Promise.reject()
 			}
       return res.data
     } else {
-      let data = res.data
-      if (data.code == 401) {
-        return handleAuth().then(() => {
-          return fly.request(request.url, request.body, request)
-        })
-      } else {
-        return handleData(data)
-      }
+      return handle(server).handleResponseRes(fly, res)
     }
   },
   (err) => {
-    handleError(err)
     let request = err.request
+    let server = request.headers.server
     log(request.method, request.baseURL + request.url, request.body, err)
-    if (err.status == 401) {
-      return handleAuth().then(() => {
-        return fly.request(request.url, request.body, request)
-      })
-    }
+    return handle(server).handleResponseErr(fly, err)
   }
 )
 
@@ -169,12 +139,12 @@ class Fetch {
 
   fetch(data, opt) {
     if (auth(this.api.server).needAuth(this.api.path)) {
-      return handleAuth().then(() => {
+      return handle(this.api.server).handleAuth().then(() => {
         return this.fetch(data, opt)
       })
     }
     if (config(this.api.server).needConfig(this.api.path)) {
-      return handleConfig().then(() => {
+      return handle(this.api.server).handleConfig().then(() => {
         return this.fetch(data, opt)
       })
     }
@@ -203,12 +173,12 @@ class Fetch {
           header: auth(this.api.server).headerInfo(this.api.path),
           success: (res) => {
             log('download', this.url, '', res)
-            handleSuccess(res)
+            handle(this.api.server).handleSuccess(res)
             resolve(res)
           },
           fail: (err) => {
             log('download', this.url, '', err)
-            handleError(err)
+            handle(this.api.server).handleError(err)
             reject(err)
           }
         })
@@ -235,12 +205,12 @@ class Fetch {
           name: 'file',
           formData: data,
           success: (res) => {
-            resolve(handleData(JSON.parse(res.data)))
+            resolve(handle(this.api.server).handleData(JSON.parse(res.data)))
             log('upload', this.url, file, res.data)
           },
           fail: (err) => {
             log('upload', this.url, file, err)
-            handleError(err)
+            handle(this.api.server).handleError(err)
             reject(err)
           }
         })
@@ -257,20 +227,45 @@ class Fetch {
 }
 
 let http = {
-  onSuccess: (func) => {
-    handleSuccess = func
+  onSuccess: (servers) => {
+    if (servers['jz']) {
+      jzServer.handle.setup.onSuccess(servers['jz'])
+    }
+    if (servers['xq']) {
+      xqServer.handle.setup.onSuccess(servers['xq'])
+    }
   },
-  onFail: (func) => {
-    handleFail = func
+  onFail: (servers) => {
+    if (servers['jz']) {
+      jzServer.handle.setup.onFail(servers['jz'])
+    }
+    if (servers['xq']) {
+      xqServer.handle.setup.onFail(servers['xq'])
+    }
   },
-  onError: (func) => {
-    handleError = func
+  onError: (servers) => {
+    if (servers['jz']) {
+      jzServer.handle.setup.onError(servers['jz'])
+    }
+    if (servers['xq']) {
+      xqServer.handle.setup.onError(servers['xq'])
+    }
   },
-  onAuth: (func) => {
-    handleAuth = func
+  onAuth: (servers) => {
+    if (servers['jz']) {
+      jzServer.handle.setup.onAuth(servers['jz'])
+    }
+    if (servers['xq']) {
+      xqServer.handle.setup.onAuth(servers['xq'])
+    }
   },
-  onConfig: (func) => {
-    handleConfig = func
+  onConfig: (servers) => {
+    if (servers['jz']) {
+      jzServer.handle.setup.onConfig(servers['jz'])
+    }
+    if (servers['xq']) {
+      xqServer.handle.setup.onConfig(servers['xq'])
+    }
   }
 }
 

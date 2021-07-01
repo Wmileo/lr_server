@@ -1,5 +1,5 @@
 let isUni = typeof(uni) != 'undefined'
-const kAuthInfo = 'xq_auth_info'
+const kAuthInfo = 'jz_auth_info'
 
 let data = isUni ? uni.getStorageSync(kAuthInfo) : window.localStorage.getItem(kAuthInfo)
 let authInfo = null
@@ -45,7 +45,28 @@ function clear() {
 
 let list = []
 
+function guid() {
+  let udid = $storage.get('jz_udid')
+  if (udid) {
+    return udid
+  }
+  udid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0,
+      v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+  $storage.set('jz_udid', udid)
+  return udid
+}
+
+
 function headerInfo(path) {
+  let udid = guid()
+  return {
+    udid,
+    server: 'jz'
+  }
+  
   return list.indexOf(path) == -1 ? authInfo : {}
 }
 
@@ -58,6 +79,8 @@ let passList = {
 }
 
 function needAuth(path) {
+  return false
+
   if (path) {
     return !authInfo && list.indexOf(path) == -1
   } else {

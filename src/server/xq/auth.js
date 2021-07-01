@@ -46,7 +46,8 @@ function clear() {
 let list = []
 
 function headerInfo(path) {
-  return list.indexOf(path) == -1 ? authInfo : {}
+  let header = list.indexOf(path) == -1 ? authInfo : {}
+  return {'server': 'xq', ...header}
 }
 
 let passList = {

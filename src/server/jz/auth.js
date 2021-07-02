@@ -45,12 +45,12 @@ function clear() {
 
 let list = []
 
-function guid() {
+function guid(key = 'xxyxxxxxx4xxxyxx') {
   let udid = $storage._get('jz_udid')
   if (udid) {
     return udid
   }
-  udid = 'xxyxxxxxx4xxxyxx'.replace(/[xy]/g, function(c) {
+  udid = key.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0,
       v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
@@ -62,8 +62,12 @@ function guid() {
 
 function headerInfo(path) {
   let udid = guid()
+  let requestid = guid('xxyxxxyxx4xxx6xx')
+  let appkey = guid('xx3xxxyxx4xxxyxx')
   return {
     udid,
+    requestid,
+    appkey,
     server: 'jz'
   }
   

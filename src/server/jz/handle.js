@@ -28,7 +28,7 @@ function handleData(data) {
   data.success = data.code == 0
   if (data.crypted) {
     data.data = JSON.parse(decrypt(data.data))
-    $log.info('server - jz', `crypted`, {data: data.data})
+    $log.info('server-jz', `crypted`, {data: data.data})
   }
   if (data.success) {
     handleSuccess(data)

@@ -1,5 +1,5 @@
 /* jshint esversion: 9 */
-import serverMgr from 'server/index.js'
+import serverMgr from './server/index.js'
 
 function auth(server) {
   return serverMgr.get(server).auth

@@ -1,5 +1,4 @@
-import xqServer from './server/xq/index.js'
-import jzServer from './server/jz/index.js'
+import serverMgr from './server/index.js'
 
 import http from './http'
 
@@ -127,27 +126,15 @@ export default {
   },
   config: {
     passList(server) {
-      if (server == 'jz') {
-        return jzServer.config.passList
-      } else {
-        return xqServer.config.passList
-      }
+      return serverMgr.get(server).config.passList
     }
   },
   auth: {
     setInfo(info, server){
-      if (server == 'jz') {
-        jzServer.auth.setInfo(info)
-      } else {
-        xqServer.auth.setInfo(info)
-      }
+      serverMgr.get(server).auth.setInfo(info)
     },
     passList(server) {
-      if (server == 'jz') {
-        return jzServer.auth.passList
-      } else {
-        return xqServer.auth.passList
-      }
+      return serverMgr.get(server).config.passList
     }
   },
   apiBuilder,

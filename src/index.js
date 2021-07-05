@@ -134,7 +134,7 @@ export default {
       serverMgr.get(server).auth.setInfo(info)
     },
     passList(server) {
-      return serverMgr.get(server).config.passList
+      return serverMgr.get(server).auth.passList
     }
   },
   apiBuilder,

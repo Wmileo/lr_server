@@ -211,7 +211,7 @@ class Fetch {
         formData.append(k, data[k])
       }
       return this.request(formData, opt)
-    }
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                  
   }
 }
 

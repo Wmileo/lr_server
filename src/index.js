@@ -1,4 +1,4 @@
-import serverMgr from './server/index.js'
+import serverMgr from './server.js'
 
 import http from './http'
 

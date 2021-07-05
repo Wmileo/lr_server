@@ -1,10 +1,11 @@
 import config from './config';
 import auth from './auth';
 
-let AES = require('crypto-js/aes')
-let UTF8 =  require('crypto-js/enc-utf8')
-let ECB =  require('crypto-js/mode-ecb')
-let Pkcs7 =  require('crypto-js/pad-pkcs7')
+import AES from 'crypto-js/aes'
+import UTF8 from 'crypto-js/enc-utf8'
+import ECB from 'crypto-js/mode-ecb'
+import Pkcs7 from 'crypto-js/pad-pkcs7'
+
 function decrypt(word) {
   let key = UTF8.parse(auth.guid())
   let decrypt = AES.decrypt(word, key, { mode: ECB, padding: Pkcs7 });

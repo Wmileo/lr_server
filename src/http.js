@@ -218,27 +218,37 @@ class Fetch {
 let http = {
   onSuccess: (servers) => {
     Object.keys(servers).forEach(key => {
-      serverMgr.get(key).handle.setup.onSuccess(servers[key])
+      if (serverMgr.get(key)) {
+        serverMgr.get(key).handle.setup.onSuccess(servers[key])
+      }
     })
   },
   onFail: (servers) => {
     Object.keys(servers).forEach(key => {
-      serverMgr.get(key).handle.setup.onFail(servers[key])
+      if (serverMgr.get(key)) {
+        serverMgr.get(key).handle.setup.onFail(servers[key])
+      }
     })
   },
   onError: (servers) => {
     Object.keys(servers).forEach(key => {
-      serverMgr.get(key).handle.setup.onError(servers[key])
+      if (serverMgr.get(key)) {
+        serverMgr.get(key).handle.setup.onError(servers[key])
+      }
     })
   },
   onAuth: (servers) => {
     Object.keys(servers).forEach(key => {
-      serverMgr.get(key).handle.setup.onAuth(servers[key])
+      if (serverMgr.get(key)) {
+        serverMgr.get(key).handle.setup.onAuth(servers[key])
+      }
     })
   },
   onConfig: (servers) => {
     Object.keys(servers).forEach(key => {
-      serverMgr.get(key).handle.setup.onConfig(servers[key])
+      if (serverMgr.get(key)) {
+        serverMgr.get(key).handle.setup.onConfig(servers[key])
+      }
     })
   }
 }

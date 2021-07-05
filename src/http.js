@@ -1,26 +1,16 @@
 /* jshint esversion: 9 */
-import xqServer from './server/xq/index.js'
-import jzServer from './server/jz/index.js'
+import serverMgr from 'server/index.js'
 
 function auth(server) {
-  if (server == 'jz') {
-    return jzServer.auth
-  }
-  return xqServer.auth
+  return serverMgr.get(server).auth
 }
 
 function config(server) {
-  if (server == 'jz') {
-    return jzServer.config
-  }
-  return xqServer.config
+  return serverMgr.get(server).config
 }
 
 function handle(server) {
-  if (server == 'jz') {
-    return jzServer.handle
-  }
-  return xqServer.handle
+  return serverMgr.get(server).handle
 }
 
 let isUni = typeof(uni) != 'undefined'
@@ -223,49 +213,33 @@ class Fetch {
       return this.request(formData, opt)
     }
   }
-
 }
 
 let http = {
   onSuccess: (servers) => {
-    if (servers['jz']) {
-      jzServer.handle.setup.onSuccess(servers['jz'])
-    }
-    if (servers['xq']) {
-      xqServer.handle.setup.onSuccess(servers['xq'])
-    }
+    Object.keys(servers).forEach(key => {
+      serverMgr.get(key).handle.setup.onSuccess(servers[key])
+    })
   },
   onFail: (servers) => {
-    if (servers['jz']) {
-      jzServer.handle.setup.onFail(servers['jz'])
-    }
-    if (servers['xq']) {
-      xqServer.handle.setup.onFail(servers['xq'])
-    }
+    Object.keys(servers).forEach(key => {
+      serverMgr.get(key).handle.setup.onFail(servers[key])
+    })
   },
   onError: (servers) => {
-    if (servers['jz']) {
-      jzServer.handle.setup.onError(servers['jz'])
-    }
-    if (servers['xq']) {
-      xqServer.handle.setup.onError(servers['xq'])
-    }
+    Object.keys(servers).forEach(key => {
+      serverMgr.get(key).handle.setup.onError(servers[key])
+    })
   },
   onAuth: (servers) => {
-    if (servers['jz']) {
-      jzServer.handle.setup.onAuth(servers['jz'])
-    }
-    if (servers['xq']) {
-      xqServer.handle.setup.onAuth(servers['xq'])
-    }
+    Object.keys(servers).forEach(key => {
+      serverMgr.get(key).handle.setup.onAuth(servers[key])
+    })
   },
   onConfig: (servers) => {
-    if (servers['jz']) {
-      jzServer.handle.setup.onConfig(servers['jz'])
-    }
-    if (servers['xq']) {
-      xqServer.handle.setup.onConfig(servers['xq'])
-    }
+    Object.keys(servers).forEach(key => {
+      serverMgr.get(key).handle.setup.onConfig(servers[key])
+    })
   }
 }
 

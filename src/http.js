@@ -133,7 +133,7 @@ class Fetch {
         return this.fetch(data, opt)
       })
     }
-    if ( && config(this.api.server).needConfig(this.api.config)) {
+    if (config(this.api.server).needConfig(this.api.config)) {
       return handle(this.api.server).handleConfig().then(() => {
         return this.fetch(data, opt)
       })

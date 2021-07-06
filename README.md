@@ -86,8 +86,6 @@ clear()
 // 获取授权信息
 headerInfo(path)
 
-// 添加免授权接口白名单
-passList.push(path)
 ```
 
 ## apiBuilder

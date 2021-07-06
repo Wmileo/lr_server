@@ -3,53 +3,67 @@ import serverMgr from './server.js'
 import http from './http'
 
 let apiBuilder = {
-  get: (path) => {
+  get: (path, auth = true, config = true) => {
     return {
       method: 'get',
       path,
-      type: 'request'
+      type: 'request',
+      auth,
+      config
     }
   },
-  post: (path) => {
+  post: (path, auth = true, config = true) => {
     return {
       method: 'post',
       path,
-      type: 'request'
+      type: 'request',
+      auth,
+      config
     }
   },
-  put: (path) => {
+  put: (path, auth = true, config = true) => {
     return {
       method: 'put',
       path,
-      type: 'request'
+      type: 'request',
+      auth,
+      config
     }
   },
-  del: (path) => {
+  del: (path, auth = true, config = true) => {
     return {
       method: 'delete',
       path,
-      type: 'request'
+      type: 'request',
+      auth,
+      config
     }
   },
-  patch: (path) => {
+  patch: (path, auth = true, config = true) => {
     return {
       method: 'patch',
       path,
-      type: 'request'
+      type: 'request',
+      auth,
+      config
     }
   },
-  download: (path, method = 'post') => {
+  download: (path, method = 'post', auth = true, config = true) => {
     return {
       method,
       path,
-      type: 'download'
+      type: 'download',
+      auth,
+      config
     }
   },
-  upload: (path, method = 'post') => {
+  upload: (path, method = 'post', auth = true, config = true) => {
     return {
       method,
       path,
-      type: 'upload'
+      type: 'upload',
+      auth,
+      config
     }
   }
 }
@@ -124,17 +138,9 @@ export default {
   http: {
     ...http.http
   },
-  config: {
-    passList(server) {
-      return serverMgr.get(server).config.passList
-    }
-  },
   auth: {
     setInfo(info, server){
       serverMgr.get(server).auth.setInfo(info)
-    },
-    passList(server) {
-      return serverMgr.get(server).auth.passList
     }
   },
   apiBuilder,

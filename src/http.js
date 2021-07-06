@@ -128,12 +128,12 @@ class Fetch {
   }
 
   fetch(data, opt) {
-    if (auth(this.api.server).needAuth(this.api.path)) {
+    if (auth(this.api.server).needAuth(this.api.auth)) {
       return handle(this.api.server).handleAuth().then(() => {
         return this.fetch(data, opt)
       })
     }
-    if (config(this.api.server).needConfig(this.api.path)) {
+    if ( && config(this.api.server).needConfig(this.api.config)) {
       return handle(this.api.server).handleConfig().then(() => {
         return this.fetch(data, opt)
       })
@@ -147,7 +147,7 @@ class Fetch {
     return fly[this.api.method](this.path, data, {
       ...opt,
       baseURL: this.api.url,
-      headers: auth(this.api.server).headerInfo(this.api.path)
+      headers: auth(this.api.server).headerInfo(this.api.auth)
     }).then(res => {
       return res
     })
@@ -160,7 +160,7 @@ class Fetch {
       return new Promise((resolve, reject) => {
         uni.downloadFile({
           url: this.url,
-          header: auth(this.api.server).headerInfo(this.api.path),
+          header: auth(this.api.server).headerInfo(this.api.auth),
           success: (res) => {
             log('download', this.url, '', res)
             handle(this.api.server).handleSuccess(res)
@@ -191,7 +191,7 @@ class Fetch {
         uni.uploadFile({
           url: this.url,
           filePath: file,
-          header: auth(this.api.server).headerInfo(this.api.path),
+          header: auth(this.api.server).headerInfo(this.api.auth),
           name: 'file',
           formData: data,
           success: (res) => {

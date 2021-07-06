@@ -43,33 +43,18 @@ function clear() {
   }
 }
 
-let list = []
-
-function headerInfo(path) {
-  let header = list.indexOf(path) == -1 ? authInfo : {}
+function headerInfo(need) {
+  let header = need ? authInfo : {}
   return {'server': 'xq', ...header}
 }
 
-let passList = {
-  push: (path) => {
-    if (list.indexOf(path) == -1) {
-      list.push(path)
-    }
-  }
-}
-
-function needAuth(path) {
-  if (path) {
-    return !authInfo && list.indexOf(path) == -1
-  } else {
-    return !authInfo
-  }
+function needAuth(need) {
+  return !authInfo && need
 }
 
 export default {
   setInfo,
   headerInfo,
   clear,
-  passList,
   needAuth
 }

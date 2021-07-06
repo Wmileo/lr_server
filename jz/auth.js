@@ -43,8 +43,6 @@ function clear() {
   }
 }
 
-let list = []
-
 function guid(key = 'xxyxxxxxx4xxxyxx') {
   let udid = $storage._get('jz_udid')
   if (udid) {
@@ -60,7 +58,7 @@ function guid(key = 'xxyxxxxxx4xxxyxx') {
 }
 
 
-function headerInfo(path) {
+function headerInfo(need) {
   let udid = guid()
   let requestid = guid('xxyxxxyxx4xxx6xx')
   let appkey = guid('xx3xxxyxx4xxxyxx')
@@ -70,33 +68,16 @@ function headerInfo(path) {
     appkey,
     server: 'jz'
   }
-  
-  return list.indexOf(path) == -1 ? authInfo : {}
 }
 
-let passList = {
-  push: (path) => {
-    if (list.indexOf(path) == -1) {
-      list.push(path)
-    }
-  }
-}
-
-function needAuth(path) {
+function needAuth(need) {
   return false
-
-  if (path) {
-    return !authInfo && list.indexOf(path) == -1
-  } else {
-    return !authInfo
-  }
 }
 
 export default {
   setInfo,
   headerInfo,
   clear,
-  passList,
   needAuth,
   guid
 }

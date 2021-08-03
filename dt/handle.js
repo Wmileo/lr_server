@@ -49,9 +49,18 @@ function handleResponseErr(fly, err) {
 }
 
 function handlerequest(request) {
+  let obj = {
+    appId: $env.appId,
+    appName: $env.appName,
+    appVersion: $env.appVersion,
+  }
   request.headers = {
+    ...obj,
     ...auth.headerInfo(request.url),
   }
+  Object.assign(request.body, {
+    ...obj
+  })
   return request
 }
 

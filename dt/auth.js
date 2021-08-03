@@ -45,7 +45,6 @@ function clear() {
 
 function headerInfo(need) {
   return {
-    appId: 36,
     // token,
     server: 'dt'
   }

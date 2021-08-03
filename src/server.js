@@ -5,10 +5,7 @@ function set(name, server) {
   servers[name] = server
 }
 
-function get(name = 'xq') {
-  if (name == 'app') {
-    name = 'xq'
-  }
+function get(name = 'dt') {
   return servers[name]
 }
 

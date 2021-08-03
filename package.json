@@ -1,14 +1,14 @@
 {
-  "name": "@xq/server",
-  "version": "3.0.0",
+  "name": "@dt/server",
+  "version": "1.0.1",
   "description": "server",
   "main": "src/index.js",
   "publishConfig": {
-    "registry": "https://npm.xqkxf.com/"
+    "registry": "http://172.16.1.129:4873/"
   },
   "repository": {
     "type": "git",
-    "url": "git@codeup.aliyun.com:5f59dbed769820a3e8184400/frontend/npm/xq_server.git"
+    "url": "ssh://git@172.16.1.129:20201/dt-web/npm/server.git"
   },
   "keywords": [
     "server"
@@ -16,7 +16,6 @@
   "author": "leo",
   "license": "ISC",
   "dependencies": {
-    "@xq/server": "1.1.1",
     "flyio": "^0.6.14"
   },
   "devDependencies": {}

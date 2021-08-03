@@ -18,8 +18,8 @@ function handleData(data) {
     handleSuccess(data)
     return data
   } else {
-    handleFail(data.code, data.description)
-    let err = new Error(data.description)
+    handleFail(data.code, data.msg)
+    let err = new Error(data.msg)
     err.code = data.code
     err.response = data
     return Promise.reject(err)
@@ -57,6 +57,9 @@ function handlerequest(request) {
   request.headers = {
     ...obj,
     ...auth.headerInfo(request.url),
+  }
+  if (!request.body) {
+    request.body = {}
   }
   Object.assign(request.body, {
     ...obj

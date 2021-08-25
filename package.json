@@ -1,6 +1,6 @@
 {
   "name": "@dt/server",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "server",
   "main": "src/index.js",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@172.16.1.129:20201/dt-web/npm/server.git"
+    "url": "ssh://git@172.16.1.129:20201/dt-web/npm/dt-server.git"
   },
   "keywords": [
     "server"

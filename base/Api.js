@@ -83,7 +83,7 @@ class Api {
   }
   
   fetch(data, opt) {
-    this.fetchHelper.fetch(this, data, opt)
+    return this.fetchHelper.fetch(this, data, opt)
   }
   
 }

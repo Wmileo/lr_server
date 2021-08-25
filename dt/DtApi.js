@@ -2,8 +2,8 @@ import Api from '../base/Api.js';
 import dt from '@dt/dt';
 
 class DtApi extends Api {
-  constructor() {
-    super()
+  constructor(fetch) {
+    super(fetch)
     this.url = dt.env.dtUrl
   }
 }

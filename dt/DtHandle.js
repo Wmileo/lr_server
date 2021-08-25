@@ -38,10 +38,10 @@ class DtHandle extends Handle {
   data(data) {
     data.success = data.code == 200
     if (data.success) {
-      this.onSuccess(data)
+      this.delegate.onSuccess(data)
       return data
     } else {
-      this.onFail(data.code, data.msg)
+      this.delegate.onFail(data.code, data.msg)
       let err = new Error(data.msg)
       err.code = data.code
       err.response = data
@@ -50,7 +50,7 @@ class DtHandle extends Handle {
   }
   
   err(err) {
-    this.onError(err)
+    this.delegate.onError(err)
     let request = err.request
     if (err.status == 401) {
       return this.auth.do().then(() => {
@@ -59,15 +59,6 @@ class DtHandle extends Handle {
     }
   }
   
-  // unimplemented
-  onSuccess(data) {
-  }
-  
-  // unimplemented
-  onFail(code, message) {
-  }
-  
-  // unimplemented
-  onError(err) {
-  }
 }
+
+export default DtHandle

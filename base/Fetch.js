@@ -20,12 +20,12 @@ class Fetch {
   }
   
   fetch(data, opt) {
-    if (this.handle.auth.need(this.api.path, this.api.auth)) {
+    if (this.handle.auth.need(this.api.path, this.api.needAuth)) {
       return this.handle.auth.do().then(() => {
         return this.fetch(data, opt)
       })
     }
-    if (this.handle.config && this.handle.config.need(this.api.path, this.api.config)) {
+    if (this.handle.config && this.handle.config.need(this.api.path, this.api.needConfig)) {
       return this.handle.config.do().then(() => {
         return this.fetch(data, opt)
       })
@@ -39,7 +39,7 @@ class Fetch {
     return this.handle.fly[this.api.method](this.path, data, {
       ...opt,
       baseURL: this.api.url,
-      headers: this.handle.auth.header(this.api.path, this.api.auth)
+      headers: this.handle.auth.header(this.api.path, this.api.needAuth)
     }).then(res => {
       return res
     })
@@ -52,15 +52,15 @@ class Fetch {
       return new Promise((resolve, reject) => {
         uni.downloadFile({
           url: this.url,
-          header: this.handle.auth.header(this.api.path, this.api.auth),
+          header: this.handle.auth.header(this.api.path, this.api.needAuth),
           success: (res) => {
             // log('download', this.url, '', res)
-            this.handle.onSuccess(res)
+            this.handle.delegate.onSuccess(res)
             resolve(res)
           },
           fail: (err) => {
             // log('download', this.url, '', err)
-            this.handle.onError(err)
+            this.handle.delegate.onError(err)
             reject(err)
           }
         })
@@ -83,7 +83,7 @@ class Fetch {
         uni.uploadFile({
           url: this.url,
           filePath: file,
-          header: this.handle.auth.header(this.api.path, this.api.auth),
+          header: this.handle.auth.header(this.api.path, this.api.needAuth),
           name: 'file',
           formData: data,
           success: (res) => {
@@ -92,7 +92,7 @@ class Fetch {
           },
           fail: (err) => {
             // log('upload', this.url, file, err)
-            this.handle.onError(err)
+            this.handle.delegate.onError(err)
             reject(err)
           }
         })

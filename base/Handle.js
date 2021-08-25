@@ -11,7 +11,7 @@ class Handle {
   constructor(auth, config) {
     this.auth = auth
     this.config = config
-    
+    this.delegate = this.auth.delegate
     this.setupFly()
   }
   
@@ -68,19 +68,6 @@ class Handle {
   err(err) {
     return err
   }
-  
-  // unimplemented
-  onSuccess(data) {
-  }
-  
-  // unimplemented
-  onFail(code, message) {
-  }
-  
-  // unimplemented
-  onError(err) {
-  }
-
   
 }
 

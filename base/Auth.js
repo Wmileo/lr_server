@@ -1,10 +1,12 @@
 import dt from '@dt/dt';
+import Delegate from './Delegate'
 
 class Auth {
   
-  constructor(key) {
+  constructor(key, delegate = new Delegate()) {
     this.authKey = key
     this.info = dt.storage.get(this.authKey)
+    this.delegate = delegate
   }
   
   setInfo(info) {
@@ -17,9 +19,8 @@ class Auth {
     dt.storage.remove(this.authKey)
   }
   
-  // unimplemented
   do() {
-    return Promise.reject(new Error('暂无自动授权操作'))
+    return this.delegate.auth()
   }
   
   // unimplemented

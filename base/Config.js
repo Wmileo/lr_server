@@ -1,12 +1,14 @@
+import Delegate from './Delegate'
+
 class Config {
-  constructor(need) {
+  constructor(need, delegate = new Delegate()) {
     this.isConfig = !need
+    this.delegate = delegate
   }
   
-  // unimplemented
   do() {
     this.finish()
-    return Promise.resolve()
+    return this.delegate.config()
   }
   
   finish() {

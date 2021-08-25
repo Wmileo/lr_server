@@ -1,72 +1,58 @@
 import dt from '@dt/dt';
 
 class Fetch {
-  constructor(api, handle) {
-    this.api = api
+  constructor(handle) {
     this.handle = handle
-    this.path = api.path //实际路径path
-    this.url = this.api.url + this.path //全路径url
-  }
-
-  fixPath(data) {
-    if (this.api.path.indexOf('[') > 0) {
-      let path = this.api.path
-      for (let k in data) {
-        path = path.replace(`[${k}]`, data[k])
-      }
-      this.path = path
-      this.url = this.api.url + this.path
-    }
   }
   
-  fetch(data, opt) {
-    if (this.handle.auth.need(this.api.path, this.api.needAuth)) {
+  fetch(api, data, opt) {
+    if (this.handle.auth.need(api.path, api.needAuth)) {
       return this.handle.auth.do().then(() => {
-        return this.fetch(data, opt)
+        return this.fetch(api, data, opt)
       })
     }
-    if (this.handle.config && this.handle.config.need(this.api.path, this.api.needConfig)) {
+    if (this.handle.config && this.handle.config.need(api.path, api.needConfig)) {
       return this.handle.config.do().then(() => {
-        return this.fetch(data, opt)
+        return this.fetch(api, data, opt)
       })
     }
-    return this[this.api.type](data, opt)
+    return this[api.type](api, data, opt)
   }
 
   // 请求
-  request(data, opt) {
-    this.fixPath(data)
-    return this.handle.fly[this.api.method](this.path, data, {
+  request(api, data, opt) {
+    api.fixPath(data)
+    return this.handle.fly[api.method](api.reqPath, data, {
       ...opt,
-      baseURL: this.api.url,
-      headers: this.handle.auth.header(this.api.path, this.api.needAuth)
+      baseURL: api.url,
+      headers: this.handle.auth.header(api.path, api.needAuth)
     }).then(res => {
       return res
     })
   }
 
   // 下载
-  download(data, opt) {
+  download(api, data, opt) {
     if (dt.env.isUni) {
-      this.fixPath(data)
+      api.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.downloadFile({
-          url: this.url,
-          header: this.handle.auth.header(this.api.path, this.api.needAuth),
+          url: api.reqUrl,
+          header: this.handle.auth.header(api.path, api.needAuth),
           success: (res) => {
-            // log('download', this.url, '', res)
+            // log('download', api.reqUrl, '', res)
             this.handle.delegate.onSuccess(res)
             resolve(res)
           },
           fail: (err) => {
-            // log('download', this.url, '', err)
+            // log('download', api.reqUrl, '', err)
             this.handle.delegate.onError(err)
             reject(err)
           }
         })
       })
     } else {
-      return this.request(data, {
+      return this.request(api, data, {
         ...opt,
         responseType: 'blob'
       })
@@ -74,24 +60,24 @@ class Fetch {
   }
 
   // 上传
-  upload(data, opt) {
+  upload(api, data, opt) {
     if (dt.env.isUni) {
       let file = data['file']
       delete data['file']
-      this.fixPath(data)
+      api.fixPath(data)
       return new Promise((resolve, reject) => {
         uni.uploadFile({
-          url: this.url,
+          url: api.reqUrl,
           filePath: file,
-          header: this.handle.auth.header(this.api.path, this.api.needAuth),
+          header: this.handle.auth.header(api.path, api.needAuth),
           name: 'file',
           formData: data,
           success: (res) => {
             resolve(this.handle.data(JSON.parse(res.data)))
-            // log('upload', this.url, file, res.data)
+            // log('upload', api.reqUrl, file, res.data)
           },
           fail: (err) => {
-            // log('upload', this.url, file, err)
+            // log('upload', api.reqUrl, file, err)
             this.handle.delegate.onError(err)
             reject(err)
           }
@@ -102,7 +88,7 @@ class Fetch {
       for (let k in data) {
         formData.append(k, data[k])
       }
-      return this.request(formData, opt)
+      return this.request(api, formData, opt)
     }                                                                                                                                                                                                                                                                                                                                                                                                                                  
   }
 }

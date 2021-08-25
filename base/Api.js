@@ -1,11 +1,12 @@
 class Api {
-  constructor() {
+  constructor(fetchHelper) {
     this.method = 'get'
     this.path = ''
     this.type = 'request'
     this.needAuth = true
     this.needConfig = true
     this.url = ''
+    this.fetchHelper = fetchHelper
   }
   
   auth(need) {
@@ -65,6 +66,24 @@ class Api {
     this.type = 'upload'
     this.path = path
     return this
+  }
+  
+  fixPath(data) {
+    if (this.path.indexOf('[') > 0) {
+      let path = this.path
+      for (let k in data) {
+        path = path.replace(`[${k}]`, data[k])
+      }
+      this.reqPath = path
+      this.reqUrl = this.url + this.reqPath
+    } else {
+      this.reqPath = this.path //实际路径path
+      this.reqUrl = this.url + this.reqPath //全路径url
+    }
+  }
+  
+  fetch(data, opt) {
+    this.fetchHelper.fetch(this, data, opt)
   }
   
 }

@@ -1,12 +1,13 @@
 class Api {
-  constructor(fetchHelper) {
+  constructor(fetch) {
     this.method = 'get'
     this.path = ''
     this.type = 'request'
     this.needAuth = true
     this.needConfig = true
     this.url = ''
-    this.fetchHelper = fetchHelper
+    
+    this.fetchHelper = fetch
   }
   
   auth(need) {
@@ -83,7 +84,36 @@ class Api {
   }
   
   fetch(data, opt) {
-    return this.fetchHelper.fetch(this, data, opt)
+    if (this.fetchRes) {
+      // 频繁请求返回上次结果
+      return Promise.resolve(this.fetchRes)
+    } else if (this.fetchErr) {
+      // 频繁请求返回上次结果
+      return Promise.reject(this.fetchErr)
+    } else if (this.fetching) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          this.fetch(data, opt).then(resolve, reject)
+        }, 200)
+      })
+    } else {
+      this.fetching = true
+      return this.fetchHelper.fetch(this, data, opt).then(res => {
+        this.fetching = false
+        this.fetchRes = res
+        setTimeout(() => {
+          this.fetchRes = null
+        }, 500)
+        return res
+      }).catch(err => {
+        this.fetching = false
+        this.fetchErr = err
+        setTimeout(() => {
+          this.fetchErr = null
+        }, 500)
+        throw err
+      })
+    }
   }
   
 }

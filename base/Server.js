@@ -12,6 +12,12 @@ class Server {
     this.fetch = new Fetch(this.handle)
   }
   
+  config(Config) {
+    this.config = new Config()
+    this.handle.config = this.config
+    return this
+  }
+  
   delegate(Delegate) {
     this.delegate = new Delegate()
     this.auth.delegate = this.delegate

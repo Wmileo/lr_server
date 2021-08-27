@@ -7,8 +7,10 @@ class Config {
   }
   
   do() {
-    this.finish()
-    return this.delegate.config()
+    return this.delegate.config().then(res => {
+      this.finish()
+      return res
+    })
   }
   
   finish() {

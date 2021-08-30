@@ -44,7 +44,7 @@ class DtHandle extends Handle {
       this.delegate.onFail(data.code, data.msg)
       let err = new Error(data.msg)
       err.code = data.code
-      err.response = data
+      err.data = data.data
       return Promise.reject(err)
     }
   }

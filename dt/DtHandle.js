@@ -39,7 +39,7 @@ class DtHandle extends Handle {
     data.success = data.code == 200
     if (data.success) {
       this.delegate.onSuccess(data)
-      return data
+      return data.data
     } else {
       this.delegate.onFail(data.code, data.msg)
       let err = new Error(data.msg)

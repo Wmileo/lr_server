@@ -12,9 +12,15 @@ class Server {
     this.fetch = new Fetch(this.handle)
   }
   
+  setAuth(auth) {
+    this.auth = auth
+    this.handle.auth = auth
+    return this
+  }
+  
   setConfig(config) {
     this.config = config
-    this.handle.config = this.config
+    this.handle.config = config
     return this
   }
   

@@ -20,4 +20,5 @@ class Delegate {
   onError(err, api) {
   }
 }
+
 export default Delegate

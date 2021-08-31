@@ -84,6 +84,7 @@ class Api {
     this.headers = this.authHelper.header(this.path, this.needAuth)
     this.data = data || {}
     this.opt = opt
+    return this
   }
   
   fetch(data, opt) {

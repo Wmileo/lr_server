@@ -1,8 +1,7 @@
 import Auth from '../base/Auth.js';
-import Delegate from '../base/Delegate.js'
 
 class DtAuth extends Auth {
-  constructor(delegate = new Delegate()) {
+  constructor(delegate) {
     super('dt_auth', delegate)
   }
 

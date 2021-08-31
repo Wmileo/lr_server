@@ -1,6 +1,5 @@
 class Delegate {
   constructor() {
-    
   }
   
   // unimplemented
@@ -14,15 +13,11 @@ class Delegate {
   }
   
   // unimplemented
-  onSuccess(data) {
+  onSuccess(data, api) {
   }
   
   // unimplemented
-  onFail(code, message) {
-  }
-  
-  // unimplemented
-  onError(err) {
+  onError(err, api) {
   }
 }
 export default Delegate

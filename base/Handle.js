@@ -2,16 +2,11 @@ import dt from '@dt/dt';
 let isUni = typeof(uni) != 'undefined'
 let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
 
-// function log(method, url, body, data) {
-//   dt.log.info('server', `${url} (${method})`, { req: body, res: data})
-// }
-
 class Handle {
   
   constructor(auth, config) {
     this.auth = auth
     this.config = config
-    this.delegate = this.auth.delegate
     this.setupFly()
   }
   
@@ -24,7 +19,6 @@ class Handle {
     this.fly.interceptors.response.use(
       (res) => {
         let request = res.request
-        // log(request.method, request.baseURL + request.url, request.body, res.data)
         if (request.responseType && request.responseType === 'blob') {
     			if (res.data.type === 'application/json') {
             return new Promise((resolve, reject) => {
@@ -43,13 +37,12 @@ class Handle {
         }
       },
       (err) => {
-        // let request = err.request
-        // log(request.method, request.baseURL + request.url, request.body, err)
         return this.err(err)
       }
     )
   }
-    // unimplemented
+  
+  // unimplemented
   request(req) {
     return req
   }

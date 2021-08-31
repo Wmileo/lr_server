@@ -30,7 +30,6 @@ class Server {
     if (this.config) {
       this.config.delegate = this.delegate
     }
-    this.handle.delegate = this.delegate
   }
   
   api() {

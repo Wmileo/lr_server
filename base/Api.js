@@ -21,6 +21,11 @@ class Api {
     return this
   }
   
+  tag(tag) {
+    this.tag = tag
+    return this
+  }
+  
   error(tag) {
     this.errTag = tag
     return this

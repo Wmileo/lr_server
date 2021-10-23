@@ -21,6 +21,7 @@ class DtApi extends Api {
     Object.assign(this.data, {
       ...obj
     })
+    return this
   }
 }
 

@@ -8,15 +8,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:Wmileo/lr_server.git"
+    "url": "git+ssh://git@github.com/Wmileo/lr_server.git"
   },
   "keywords": [
     "server"
   ],
-  "author": "leo",
+  "author": "Wmileo",
   "license": "ISC",
   "dependencies": {
     "flyio": "^0.6.14"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "bugs": {
+    "url": "https://github.com/Wmileo/lr_server/issues"
+  },
+  "homepage": "https://github.com/Wmileo/lr_server#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }

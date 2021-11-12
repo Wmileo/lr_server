@@ -1,6 +1,6 @@
 {
-  "name": "@lrrrr/server",
-  "version": "1.0.0",
+  "name": "lr_server",
+  "version": "1.0.1",
   "description": "server",
   "main": "index.js",
   "publishConfig": {

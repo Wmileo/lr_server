@@ -1,4 +1,4 @@
-import dt from '@dt/dt';
+let isUni = typeof(uni) != 'undefined'
 
 class Fetch {
   constructor(handle) {
@@ -32,7 +32,7 @@ class Fetch {
 
   // 下载
   download(api) {
-    if (dt.env.isUni) {
+    if (isUni) {
       return new Promise((resolve, reject) => {
         uni.downloadFile({
           url: api.reqUrl,
@@ -56,7 +56,7 @@ class Fetch {
 
   // 上传
   upload(api) {
-    if (dt.env.isUni) {
+    if (isUni) {
       let file = api.data['file']
       return new Promise((resolve, reject) => {
         uni.uploadFile({

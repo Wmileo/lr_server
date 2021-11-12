@@ -1,22 +1,22 @@
-import dt from '@dt/dt';
+import lr from '@lr17/lr';
 import Delegate from './Delegate'
 
 class Auth {
   
   constructor(key, delegate = new Delegate()) {
     this.authKey = key
-    this.info = dt.storage.get(this.authKey)
+    this.info = lr.storage.get(this.authKey)
     this.delegate = delegate
   }
   
   setInfo(info) {
     this.info = info
-    dt.storage.set(this.authKey, info)
+    lr.storage.set(this.authKey, info)
   }
   
   clear() {
     this.info = null
-    dt.storage.remove(this.authKey)
+    lr.storage.remove(this.authKey)
   }
   
   do() {

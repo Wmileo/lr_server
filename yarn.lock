@@ -2,12 +2,10 @@
 # yarn lockfile v1
 
 
-"@xq/server@1.1.1":
-  version "1.1.1"
-  resolved "https://npm.xqkxf.com/@xq%2fserver/-/server-1.1.1.tgz#d703621e38cd24b1714b2102cd5308867d2ef0c0"
-  integrity sha512-r4ppmk85MLEi+A3hGb88UR6piDcDMHO2V+586qj22PK23d4+n3woD61FuTG9ypoy2jarkxY5Pcle6aTnqdU0Ng==
-  dependencies:
-    flyio "^0.6.14"
+"@lr17/lr@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@lr17/lr/-/lr-1.0.0.tgz#ed4a9959c52dc3ee6b9669df98f736068f65ccad"
+  integrity sha512-J9fl+/rrRebMSKPFg5OiaUk6NoZ1kET0s8hXVWwPNHXVKFovbZksKgh8druzsfILzdTY88eFi/3NXX0Ao8sqkA==
 
 ajv@^6.12.3:
   version "6.12.5"

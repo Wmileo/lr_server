@@ -1,6 +1,6 @@
 {
-  "name": "lr_server",
-  "version": "1.0.1",
+  "name": "@lr17/server",
+  "version": "1.0.2",
   "description": "server",
   "main": "index.js",
   "publishConfig": {
@@ -11,11 +11,13 @@
     "url": "git+ssh://git@github.com/Wmileo/lr_server.git"
   },
   "keywords": [
+    "lr",
     "server"
   ],
   "author": "Wmileo",
   "license": "ISC",
   "dependencies": {
+    "@lr17/lr": "^1.0.0",
     "flyio": "^0.6.14"
   },
   "devDependencies": {},

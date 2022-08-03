@@ -1,5 +1,5 @@
 let isUni = typeof(uni) != 'undefined'
-let Fly = require(isUni ? 'flyio/dist/npm/wx' : 'flyio/dist/npm/fly')
+import Fly from 'flyio/dist/npm/wx'
 
 class Handle {
   

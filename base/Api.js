@@ -93,16 +93,18 @@ class Api {
   }
   
   fetch(data, opt) {
+    let same = (!data && !this.oldData) || ((data && this.oldData) && JSON.stringify(data) == JSON.stringify(this.oldData))
+    this.oldData = {...data}
     this.setData(data, opt)
-    if (this.fetchRes) {
+    if (same && this.fetchRes) {
       // 频繁请求返回上次结果
       this.delegateHelper.onSuccess(this.fetchRes, this)
       return Promise.resolve(this.fetchRes)
-    } else if (this.fetchErr) {
+    } else if (same && this.fetchErr) {
       // 频繁请求返回上次结果
       this.delegateHelper.onError(this.fetchErr, this)
       return Promise.reject(this.fetchErr)
-    } else if (this.fetching) {
+    } else if (same && this.fetching) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           this.fetch(data, opt).then(resolve, reject)
@@ -116,7 +118,7 @@ class Api {
         this.delegateHelper.onSuccess(this.fetchRes, this)
         setTimeout(() => {
           this.fetchRes = null
-        }, 500)
+        }, 1000)
         return res
       }).catch(err => {
         this.fetching = false
@@ -124,7 +126,7 @@ class Api {
         this.delegateHelper.onError(this.fetchErr, this)
         setTimeout(() => {
           this.fetchErr = null
-        }, 500)
+        }, 1000)
         throw err
       })
     }

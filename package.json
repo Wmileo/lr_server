@@ -6,6 +6,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "scripts": {
+    "upload": "sh ./upload.sh",
+    "test": "node ./test/index.js --trace-warnings"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Wmileo/lr_server.git"
@@ -14,18 +18,16 @@
     "lr",
     "server"
   ],
+  "files": [
+    "src/"
+  ],
+  "type": "module",
   "author": "Wmileo",
   "license": "ISC",
   "dependencies": {
-    "@lr17/lr": "^1.0.0",
+    "@lr17/lr": "^1.0.7",
     "flyio": "^0.6.14"
   },
   "devDependencies": {},
-  "bugs": {
-    "url": "https://github.com/Wmileo/lr_server/issues"
-  },
-  "homepage": "https://github.com/Wmileo/lr_server#readme",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  "homepage": "https://github.com/Wmileo/lr_server#readme"
 }

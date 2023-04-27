@@ -3,6 +3,10 @@ import Config from './Config.js'
 class Handle {
   constructor(delegate) {
     this.delegate = delegate
+
+    this.url = '' // unimplemented
+    this.globalData = {} // unimplemented
+    this.globalHeaders = {} // unimplemented
   }
 
   // 初始化 auth, config
@@ -37,7 +41,7 @@ class Handle {
 
   // 处理请求后response
   response(res) {
-    return this.data(res.data)
+    return res
   }
 
   // 处理返回数据

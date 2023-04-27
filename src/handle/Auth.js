@@ -27,12 +27,12 @@ class Auth {
   }
 
   // unimplemented
-  header(path, need) {
+  header(api) {
     return {}
   }
 
   // unimplemented
-  need(path) {
+  need(api) {
     return false
   }
 }

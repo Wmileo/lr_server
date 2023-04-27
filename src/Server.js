@@ -1,17 +1,29 @@
+import DefaultApi from './Api.js'
+import DefaultHandle from './handle/Handle.js'
+import DefaultDelegate from './Delegate.js'
+
 class Server {
-  constructor(opt) {
-    this.Api = opt.Api
-    this.Handle = opt.Handle
-    this.Fetch = opt.Fetch
+  constructor(Fetch, Api, Handle) {
+    if (!Fetch) {
+      console.error('Server 参数未正常配置')
+    }
+    this.Api = Api ?? DefaultApi
+    this.Handle = Handle ?? DefaultHandle
+    this.Fetch = Fetch
   }
 
-  setDelegate(delegate) {
-    this.fetch = new this.Fetch(new this.Handle(delegate))
+  setup(Delegate) {
+    this.handle = new this.Handle(new Delegate())
+    this.fetch = new this.Fetch(this.handle)
   }
 
   api(path) {
+    if (!this.fetch) {
+      this.handle = new this.Handle(new DefaultDelegate())
+      this.fetch = new this.Fetch(this.handle)
+    }
     let api = new this.Api(path)
-    api.setFetcher(this.fetch)
+    this.fetch.bindApi(api)
     return api
   }
 

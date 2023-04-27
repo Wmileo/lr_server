@@ -5,14 +5,14 @@ class TestAuth extends Auth {
     super('test')
   }
 
-  header(path, need) {
+  header(api) {
     return {
       token: 'token'
     }
   }
 
-  need(path) {
-    return path.indexOf('/auth/') >= 0
+  need(api) {
+    return api.path.indexOf('/auth/') >= 0
   }
 }
 export default TestAuth

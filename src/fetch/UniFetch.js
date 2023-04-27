@@ -26,7 +26,7 @@ class UniFetch extends Fetch {
     return new Promise((resolve, reject) => {
       uni.downloadFile({
         url: api.url + api.reqPath,
-        header: api.getHeaders(),
+        header: this.getHeaders(api),
         success: (res) => {
           this.handle.response(res).then(resolve, reject)
         },
@@ -39,13 +39,13 @@ class UniFetch extends Fetch {
 
   // 上传
   upload(api) {
-    let data = api.getData()
+    let data = this.getData(api)
     let file = data.file
     return new Promise((resolve, reject) => {
       uni.uploadFile({
         url: api.url + api.reqPath,
         filePath: file,
-        header: api.getHeaders(),
+        header: this.getHeaders(api),
         name: data.name,
         formData: data,
         success: (res) => {

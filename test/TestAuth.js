@@ -12,7 +12,7 @@ class TestAuth extends Auth {
   }
 
   need(api) {
-    return api.path.indexOf('/auth/') >= 0
+    return false
   }
 }
 export default TestAuth

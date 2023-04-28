@@ -8,7 +8,7 @@ class TestHandle extends Handle {
   }
 
   // 处理请求前request
-  request(req) {
+  request(req, oo) {
     return req
   }
 

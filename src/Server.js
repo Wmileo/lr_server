@@ -3,7 +3,7 @@ import DefaultHandle from './handle/Handle.js'
 import DefaultDelegate from './Delegate.js'
 
 class Server {
-  constructor(Fetch, Api, Handle) {
+  constructor(Fetch, Handle, Api) {
     if (!Fetch) {
       console.error('Server 参数未正常配置')
     }

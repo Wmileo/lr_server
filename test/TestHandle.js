@@ -5,26 +5,19 @@ class TestHandle extends Handle {
   constructor(delegate) {
     super(delegate)
     super.setup(TestAuth, true)
+    this.url = 'https://www.baidu.com'
+    this.globalData = { aaa: 'llll' }
+    this.globalHeaders = { kkk: 'oooo' }
   }
 
   // 处理请求前request
-  request(req, oo) {
+  request(req) {
     return req
   }
 
-  // 处理请求后response
-  response(res) {
-    return this.data(res.data)
-  }
-
   // 处理返回数据
-  data(data) {
+  data(data, isObject) {
     return data
-  }
-
-  // 处理返回错误
-  err(err) {
-    return err
   }
 }
 

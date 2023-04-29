@@ -14,5 +14,13 @@ class TestAuth extends Auth {
   need(api) {
     return false
   }
+
+  needAuth(res, isError) {
+    return false
+  }
+
+  needRefresh(res, isError) {
+    return false
+  }
 }
 export default TestAuth

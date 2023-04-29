@@ -1,12 +1,11 @@
 import { createServer, setupFetch } from '../src/index.js'
-import TestApi from './TestApi.js'
 import TestDelegate from './TestDelegate.js'
 import TestHandle from './TestHandle.js'
 import NodeFetch from '../src/fetch/NodeFetch.js'
 
 setupFetch(NodeFetch)
-const server = createServer(TestApi, TestHandle)
+const server = createServer(TestHandle)
 server.setup(TestDelegate)
 
-let api = server.get('path')
+let api = server.post('path').bindTimeout(1000)
 api.fetch({ kk: 'kk' })

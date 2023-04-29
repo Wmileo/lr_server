@@ -39,19 +39,19 @@ class Handle {
     return req
   }
 
-  // 处理请求后response
-  response(res) {
-    return res
+  response(res, api, data) {
+    let isObject = typeof res == 'object'
+    if (this.auth && isObject) {
+      return this.auth.checkResponse(res, api, data, this.delegate).then((res) => this.data(res, true))
+    } else {
+      if (Object.prototype.toString.call(res).indexOf('Error') >= 0) throw res
+      return this.data(res, isObject)
+    }
   }
 
   // 处理返回数据
-  data(data) {
-    return data
-  }
-
-  // 处理返回错误
-  err(err) {
-    return err
+  data(res, isObject) {
+    return Promise.resolve(res)
   }
 }
 

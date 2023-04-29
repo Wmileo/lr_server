@@ -11,6 +11,11 @@ class Delegate {
     return Promise.reject(new Error('暂无自动授权操作'))
   }
 
+  // unimplemented 处理请求授权失效的情况
+  refreshAuth() {
+    return Promise.reject(new Error('暂无自动刷新授权操作'))
+  }
+
   // unimplemented 处理成功请求
   onSuccess(data, api) {}
 

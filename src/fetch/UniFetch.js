@@ -8,52 +8,54 @@ class UniFetch extends Fetch {
 
   setupFly() {
     this.fly = new Fly()
-    this.fly.interceptors.request.use((request) => {
-      return this.handle.request(request)
-    })
+    super.setupFly()
     this.fly.interceptors.response.use(
-      (res) => {
-        return this.handle.response(res)
-      },
-      (err) => {
-        return this.handle.err(err)
-      }
+      (res) => res.data,
+      (err) => err
     )
   }
 
-  // 下载
+  // 下载～～～
   download(api) {
+    let data = this.getData(api)
+    let file = data.file
     return new Promise((resolve, reject) => {
       uni.downloadFile({
-        url: api.url + api.reqPath,
+        url: this.handle.url + api.reqPath,
         header: this.getHeaders(api),
+        timeout: api.timeout,
+        filePath: file,
         success: (res) => {
-          this.handle.response(res).then(resolve, reject)
-        },
-        fail: (err) => {
-          this.handle.err(err).then(resolve, reject)
+          if (res.statusCode == 200) {
+            resolve({
+              success: true,
+              file: res.filePath ?? res.tempFilePath
+            })
+          } else {
+            // ～～～
+            reject()
+          }
         }
+        // ～～～
+        // fail: (err) => this.handle.err(err).then(resolve, reject)
       })
     })
   }
 
-  // 上传
+  // 上传～～～
   upload(api) {
     let data = this.getData(api)
     let file = data.file
     return new Promise((resolve, reject) => {
       uni.uploadFile({
-        url: api.url + api.reqPath,
+        url: this.handle.url + api.reqPath,
         filePath: file,
         header: this.getHeaders(api),
         name: data.name,
         formData: data,
-        success: (res) => {
-          this.handle.response(JSON.parse(res.data)).then(resolve, reject)
-        },
-        fail: (err) => {
-          this.handle.err(err).then(resolve, reject)
-        }
+        success: (res) => resolve(JSON.parse(res.data))
+        // ～～～
+        // fail: (err) => this.handle.err(err).then(resolve, reject)
       })
     })
   }

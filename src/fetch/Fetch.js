@@ -11,6 +11,9 @@ class Fetch {
       console.error('Fetch 参数未正常配置')
       return
     }
+    this.fly.interceptors.request.use((request) => {
+      return this.handle.request(request)
+    })
   }
 
   bindApi(api) {
@@ -38,7 +41,7 @@ class Fetch {
       // 加入宏观任务 开始请求
       return new Promise((resolve, reject) =>
         setTimeout(() =>
-          this.fetchStep2(api)
+          this.fetchStep2(api, data)
             .then(resolve, reject)
             .finally(() => (api.fetching = false))
         )
@@ -46,7 +49,7 @@ class Fetch {
     }
   }
 
-  fetchStep2(api) {
+  fetchStep2(api, data) {
     if (api.resStr) {
       // 频繁请求返回上次结果
       let res = JSON.parse(api.resStr)
@@ -60,12 +63,14 @@ class Fetch {
       return this.handle.before(api).then(() => {
         return this[api.type](api)
           .then((res) => {
-            if (api.isCache) {
-              api.resStr = JSON.stringify(res)
-              setTimeout(() => (api.resStr = null), 1500)
-            }
-            this.handle.delegate.onSuccess(res, api)
-            return res
+            return this.handle.response(res, api, data).then((res) => {
+              if (api.isCache) {
+                api.resStr = JSON.stringify(res)
+                setTimeout(() => (api.resStr = null), 1500)
+              }
+              this.handle.delegate.onSuccess(res, api)
+              return res
+            })
           })
           .catch((err) => {
             if (api.isCache) {
@@ -95,7 +100,7 @@ class Fetch {
   request(api, opt) {
     return this.fly[api.method](api.reqPath, this.getData(api), {
       ...opt,
-      baseURL: api.url,
+      baseURL: this.handle.url,
       headers: this.getHeaders(api),
       timeout: api.timeout
     })

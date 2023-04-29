@@ -9,10 +9,21 @@ class Auth {
 
   check(api, delegate) {
     let need = api.skip.indexOf('auth') >= 0
-    if (this.need(api.path) && !this.info && need) {
+    if (this.needHandle(api.path) && !this.info && need) {
       return delegate.auth()
     } else {
       return Promise.resolve(1)
+    }
+  }
+
+  checkResponse(res, api, data, delegate) {
+    let isError = Object.prototype.toString.call(res).indexOf('Error') >= 0
+    if (this.needAuth(res, isError)) {
+      return delegate.auth().then(() => api.fetch(data))
+    } else if (this.needRefresh(res, isError)) {
+      return delegate.refreshAuth().then(() => api.fetch(data))
+    } else {
+      return res
     }
   }
 
@@ -32,7 +43,15 @@ class Auth {
   }
 
   // unimplemented
-  need(api) {
+  needHandle(api) {
+    return false
+  }
+
+  needAuth(res, isError) {
+    return false
+  }
+
+  needRefresh(res, isError) {
     return false
   }
 }

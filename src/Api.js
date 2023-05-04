@@ -32,12 +32,14 @@ class Api {
   bindTags(tags) {
     return (this.tags = tags) && this
   }
+  // get post put delete patch
   bindMethod(method) {
     return (this.method = method) && this
-  } // get post put delete patch
+  }
+  // request download upload
   bindType(type) {
     return (this.type = type) && this
-  } // request download upload
+  }
 
   setQuery(data) {
     this.query = data

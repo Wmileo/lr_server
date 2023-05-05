@@ -33,7 +33,9 @@ class UniFetch extends Fetch {
               ...res
             })
           } else {
-            reject(new Error(res))
+            let err = new Error()
+            Object.assign(err, res)
+            reject(err)
           }
         },
         fail: reject
@@ -60,7 +62,9 @@ class UniFetch extends Fetch {
             if (res.status == 200) {
               resolve(JSON.parse(res.data))
             } else {
-              reject(new Error(res))
+              let err = new Error()
+              Object.assign(err, res)
+              reject(err)
             }
           },
           fail: reject

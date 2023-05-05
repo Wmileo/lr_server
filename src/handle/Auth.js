@@ -16,14 +16,14 @@ class Auth {
     }
   }
 
-  checkResponse(res, api, data, delegate) {
+  checkResponse(res, delegate) {
     let isError = Object.prototype.toString.call(res).indexOf('Error') >= 0
     if (this.needAuth(res, isError)) {
-      return delegate.auth().then(() => api.fetch(data))
+      return delegate.auth().then(() => 0)
     } else if (this.needRefresh(res, isError)) {
-      return delegate.refreshAuth().then(() => api.fetch(data))
+      return delegate.refreshAuth().then(() => 0)
     } else {
-      return res
+      return Promise.resolve(1) // 原始数据还需处理下一步
     }
   }
 
@@ -37,20 +37,21 @@ class Auth {
     this.cache.remove(this.authKey)
   }
 
-  // unimplemented
+  // 返回授权头
   header(api) {
     return {}
   }
 
-  // unimplemented
+  // 是否需要授权操作
   needHandle(api) {
     return false
   }
 
+  // 是否需要重新授权
   needAuth(res, isError) {
     return false
   }
-
+  // 是否需要刷新授权
   needRefresh(res, isError) {
     return false
   }

@@ -37,7 +37,7 @@ class DefaultFetch extends Fetch {
 
   // 下载
   download(api) {
-    return this.request(api, { responseType: 'blob' })
+    return this.request(api, { responseType: 'blob' }).then((res) => (res.success = true && res))
   }
 
   // 上传

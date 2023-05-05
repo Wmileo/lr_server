@@ -40,18 +40,31 @@ class Handle {
   }
 
   response(res, api, data) {
-    let isObject = typeof res == 'object'
-    if (this.auth && isObject) {
-      return this.auth.checkResponse(res, api, data, this.delegate).then((res) => this.data(res, true))
+    let func = () => (this.isSuccess(res) || res.success ? this.success(res) : this.fail(res))
+    if (this.auth) {
+      return this.auth.checkResponse(res, this.delegate).then((type) => {
+        // type 1 不需要授权 0 需要授权并已发起授权成功（需重新发起请求）
+        return type == 1 ? func() : api.fetch(data)
+      })
     } else {
       if (Object.prototype.toString.call(res).indexOf('Error') >= 0) throw res
-      return this.data(res, isObject)
+      return func()
     }
   }
 
-  // 处理返回数据
-  data(res, isObject) {
+  // 判断业务请求是否成功，并按需要处理数据
+  isSuccess(res) {
+    return true
+  }
+
+  success(res) {
     return Promise.resolve(res)
+  }
+
+  fail(res) {
+    let err = new Error()
+    Object.assign(err, res)
+    throw err
   }
 }
 

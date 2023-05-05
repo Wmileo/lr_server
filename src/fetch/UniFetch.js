@@ -9,10 +9,7 @@ class UniFetch extends Fetch {
   setupFly() {
     this.fly = new Fly()
     super.setupFly()
-    this.fly.interceptors.response.use(
-      (res) => res.data,
-      (err) => err
-    )
+    this.fly.interceptors.response.use((res) => res.data)
   }
 
   // 下载

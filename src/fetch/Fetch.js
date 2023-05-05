@@ -62,26 +62,38 @@ class Fetch {
     } else {
       return this.handle.before(api).then(() => {
         return this[api.type](api)
-          .then((res) => {
-            return this.handle.response(res, api, data).then((res) => {
-              if (api.isCache) {
-                api.resStr = JSON.stringify(res)
-                setTimeout(() => (api.resStr = null), 1500)
-              }
-              this.handle.delegate.onSuccess(res, api)
-              return res
-            })
-          })
+          .then((res) => this.fetchStep3(200, res, api, data))
           .catch((err) => {
-            if (api.isCache) {
-              api.resErr = err
-              setTimeout(() => (api.resErr = null), 1500)
+            if (err.status) {
+              return this.fetchStep3(err.status, err, api, data)
+            } else {
+              this.handle.delegate.onError(err, api)
+              throw err
             }
-            this.handle.delegate.onError(err, api)
-            throw err
           })
       })
     }
+  }
+
+  fetchStep3(status, res, api, data) {
+    return this.handle
+      .response(status, res, api, data)
+      .then((res) => {
+        if (api.isCache) {
+          api.resStr = JSON.stringify(res)
+          setTimeout(() => (api.resStr = null), 1500)
+        }
+        this.handle.delegate.onSuccess(res, api)
+        return res
+      })
+      .catch((err) => {
+        if (api.isCache) {
+          api.resErr = err
+          setTimeout(() => (api.resErr = null), 1500)
+        }
+        this.handle.delegate.onError(err, api)
+        throw err
+      })
   }
 
   getData(api) {

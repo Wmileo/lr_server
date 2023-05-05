@@ -16,11 +16,10 @@ class Auth {
     }
   }
 
-  checkResponse(res, delegate) {
-    let isError = Object.prototype.toString.call(res).indexOf('Error') >= 0
-    if (this.needAuth(res, isError)) {
+  checkResponse(delegate, status, res) {
+    if (this.needAuth(status, res)) {
       return delegate.auth().then(() => 0)
-    } else if (this.needRefresh(res, isError)) {
+    } else if (this.needRefresh(status, res)) {
       return delegate.refreshAuth().then(() => 0)
     } else {
       return Promise.resolve(1) // 原始数据还需处理下一步
@@ -48,11 +47,11 @@ class Auth {
   }
 
   // 是否需要重新授权
-  needAuth(res, isError) {
+  needAuth(status, res) {
     return false
   }
   // 是否需要刷新授权
-  needRefresh(res, isError) {
+  needRefresh(status, res) {
     return false
   }
 }

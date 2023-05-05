@@ -7,20 +7,17 @@ class DefaultFetch extends Fetch {
 
   setupFly() {
     super.setupFly()
-    this.fly.interceptors.response.use(
-      (res) => {
-        if (res.request.responseType == 'blob' && res.data.type == 'application/json') {
-          return new Promise((resolve, reject) => {
-            let reader = new FileReader()
-            reader.readAsText(res.data)
-            reader.onload = (e) => resolve(JSON.parse(e.target.result))
-            reader.onerror = reject
-          })
-        }
-        return res.data
-      },
-      (err) => err
-    )
+    this.fly.interceptors.response.use((res) => {
+      if (res.request.responseType == 'blob' && res.data.type == 'application/json') {
+        return new Promise((resolve, reject) => {
+          let reader = new FileReader()
+          reader.readAsText(res.data)
+          reader.onload = (e) => resolve(JSON.parse(e.target.result))
+          reader.onerror = reject
+        })
+      }
+      return res.data
+    })
   }
 
   getData(api) {

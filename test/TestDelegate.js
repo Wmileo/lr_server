@@ -23,12 +23,12 @@ class TestDelegate extends Delegate {
 
   // unimplemented 处理成功请求
   onSuccess(data, api) {
-    console.log('success', data, api)
+    console.log('success')
   }
 
   // unimplemented 处理失败请求
   onError(err, api) {
-    console.log('error', err, api)
+    console.log('error')
   }
 }
 export default TestDelegate

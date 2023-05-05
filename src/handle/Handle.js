@@ -39,15 +39,17 @@ class Handle {
     return req
   }
 
-  response(res, api, data) {
-    let func = () => (this.isSuccess(res) || res.success ? this.success(res) : this.fail(res))
+  response(status, res, api, data) {
+    let func = () => {
+      if (status != 200) return Promise.reject(res)
+      return this.isSuccess(res) || res.success ? this.success(res) : this.fail(res)
+    }
     if (this.auth) {
-      return this.auth.checkResponse(res, this.delegate).then((type) => {
+      return this.auth.checkResponse(this.delegate, status, res).then((type) => {
         // type 1 不需要授权 0 需要授权并已发起授权成功（需重新发起请求）
         return type == 1 ? func() : api.fetch(data)
       })
     } else {
-      if (Object.prototype.toString.call(res).indexOf('Error') >= 0) throw res
       return func()
     }
   }
@@ -64,7 +66,7 @@ class Handle {
   fail(res) {
     let err = new Error()
     Object.assign(err, res)
-    throw err
+    return Promise.reject(err)
   }
 }
 

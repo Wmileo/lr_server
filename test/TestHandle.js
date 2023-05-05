@@ -15,9 +15,9 @@ class TestHandle extends Handle {
     return req
   }
 
-  // 处理返回数据
-  data(data, isObject) {
-    return data
+  // 判断业务请求是否成功，并按需要处理数据
+  isSuccess(res) {
+    return true
   }
 }
 

@@ -7,5 +7,5 @@ setupFetch(NodeFetch)
 const server = createServer(TestHandle)
 server.setup(TestDelegate)
 
-let api = server.post('path').bindTimeout(1000)
+let api = server.post('').bindTimeout(1000)
 api.fetch({ kk: 'kk' })

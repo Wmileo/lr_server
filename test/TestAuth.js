@@ -1,4 +1,4 @@
-import Auth from '../src/handle/Auth.js'
+import { Auth } from '../src/index.js'
 
 class TestAuth extends Auth {
   constructor() {

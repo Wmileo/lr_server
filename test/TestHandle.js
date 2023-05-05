@@ -1,4 +1,4 @@
-import Handle from '../src/handle/Handle.js'
+import { Handle } from '../src/index.js'
 import TestAuth from './TestAuth.js'
 
 class TestHandle extends Handle {

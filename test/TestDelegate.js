@@ -1,4 +1,4 @@
-import Delegate from '../src/Delegate.js'
+import { Delegate } from '../src/index.js'
 import TestAuth from './TestAuth.js'
 
 class TestDelegate extends Delegate {

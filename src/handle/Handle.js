@@ -47,7 +47,11 @@ class Handle {
     if (this.auth) {
       return this.auth.checkResponse(this.delegate, status, res).then((type) => {
         // type 1 不需要授权 0 需要授权并已发起授权成功（需重新发起请求）
-        return type == 1 ? func() : (api.fetching = false) && api.fetch(data)
+        if (type == 1) return func()
+        else {
+          api.fetching = false
+          return api.fetch(data)
+        }
       })
     } else {
       return func()

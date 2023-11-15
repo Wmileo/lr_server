@@ -112,7 +112,7 @@ class Fetch {
   request(api, opt) {
     return this.fly[api.method](api.reqPath, this.getData(api), {
       ...opt,
-      baseURL: this.handle.url,
+      baseURL: api.url || this.handle.url,
       headers: this.getHeaders(api),
       timeout: api.timeout
     })

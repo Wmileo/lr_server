@@ -10,6 +10,7 @@ class Api {
     this.tags = []
 
     // 参数
+    this.url = null
     this.query = null
     this.data = null
 
@@ -18,27 +19,39 @@ class Api {
   }
 
   unbindAuth() {
-    return this.skip.push('auth') && this
+    this.skip.push('auth')
+    return this
   }
   unbindConfig() {
-    return this.skip.push('config') && this
+    this.skip.push('config')
+    return this
   }
   unbindCache() {
-    return (this.isCache = false) && this
+    this.isCache = false
+    return this
   }
   bindTimeout(timeout) {
-    return (this.timeout = timeout) && this
+    this.timeout = timeout
+    return this
   }
   bindTags(tags) {
-    return (this.tags = tags) && this
+    this.tags = tags
+    return this
   }
   // get post put delete patch
   bindMethod(method) {
-    return (this.method = method) && this
+    this.method = method
+    return this
   }
   // request download upload
   bindType(type) {
-    return (this.type = type) && this
+    this.type = type
+    return this
+  }
+
+  bindUrl(url) {
+    this.url = url
+    return this
   }
 
   setQuery(data) {

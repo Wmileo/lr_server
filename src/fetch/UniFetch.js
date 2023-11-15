@@ -17,7 +17,7 @@ class UniFetch extends Fetch {
     let data = this.getData(api)
     return new Promise((resolve, reject) => {
       let task = uni.downloadFile({
-        url: this.handle.url + api.reqPath,
+        url: (api.url || this.handle.url) + api.reqPath,
         header: this.getHeaders(api),
         timeout: api.timeout,
         filePath: data.filePath,
@@ -48,7 +48,7 @@ class UniFetch extends Fetch {
     return new Promise((resolve, reject) => {
       if (filePath) {
         let task = uni.uploadFile({
-          url: this.handle.url + api.reqPath,
+          url: (api.url || this.handle.url) + api.reqPath,
           filePath,
           timeout: api.timeout,
           header: this.getHeaders(api),

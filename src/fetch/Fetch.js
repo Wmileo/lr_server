@@ -91,7 +91,6 @@ class Fetch {
           api.resErr = err
           setTimeout(() => (api.resErr = null), 1500)
         }
-        this.handle.delegate.onError(err, api)
         throw err
       })
   }

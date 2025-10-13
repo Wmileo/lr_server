@@ -6,23 +6,26 @@ class DefaultFetch extends Fetch {
   }
 
   setupFly() {
-    super.setupFly()
-    this.fly.interceptors.response.use((res) => {
-      if (res.request.responseType == 'blob' && res.data.type == 'application/json') {
-        return new Promise((resolve, reject) => {
-          let reader = new FileReader()
-          reader.readAsText(res.data)
-          reader.onload = (e) => resolve(JSON.parse(e.target.result))
-          reader.onerror = reject
-        })
-      }
-      return res.data
-    })
+    // DefaultFetch需要子类设置fly后再调用
+    if (this.fly) {
+      super.setupFly()
+      this.fly.interceptors.response.use((res) => {
+        if (res.request.responseType == 'blob' && res.data.type == 'application/json') {
+          return new Promise((resolve, reject) => {
+            let reader = new FileReader()
+            reader.readAsText(res.data)
+            reader.onload = (e) => resolve(JSON.parse(e.target.result))
+            reader.onerror = reject
+          })
+        }
+        return res.data
+      })
+    }
   }
 
-  getData(api) {
-    let data = super.getData(api)
-    if (api.isFormData) {
+  getData(requestContext) {
+    let data = super.getData(requestContext)
+    if (requestContext.isFormData) {
       let formData = new FormData()
       for (let k in data) {
         formData.append(k, data[k])
@@ -33,14 +36,16 @@ class DefaultFetch extends Fetch {
   }
 
   // 下载
-  download(api) {
-    return this.request(api, { responseType: 'blob' }).then((res) => (res.success = true && res))
+  download(api, requestContext) {
+    return this.request(api, requestContext, { responseType: 'blob' }).then(
+      (res) => (res.success = true && res)
+    )
   }
 
   // 上传
-  upload(api) {
-    api.isFormData = true
-    return this.request(api)
+  upload(api, requestContext) {
+    requestContext.isFormData = true
+    return this.request(api, requestContext)
   }
 }
 

@@ -13,11 +13,11 @@ class UniFetch extends Fetch {
   }
 
   // 下载
-  download(api) {
-    let data = this.getData(api)
+  download(api, requestContext) {
+    let data = this.getData(requestContext)
     return new Promise((resolve, reject) => {
       let task = uni.downloadFile({
-        url: (api.url || this.handle.url) + api.reqPath,
+        url: (api.url || this.handle.url) + requestContext.reqPath,
         header: this.getHeaders(api),
         timeout: api.timeout,
         filePath: data.filePath,
@@ -42,13 +42,13 @@ class UniFetch extends Fetch {
   }
 
   // 上传
-  upload(api) {
-    let data = this.getData(api)
+  upload(api, requestContext) {
+    let data = this.getData(requestContext)
     let filePath = data.filePath
     return new Promise((resolve, reject) => {
       if (filePath) {
         let task = uni.uploadFile({
-          url: (api.url || this.handle.url) + api.reqPath,
+          url: (api.url || this.handle.url) + requestContext.reqPath,
           filePath,
           timeout: api.timeout,
           header: this.getHeaders(api),

@@ -58,20 +58,32 @@ class Api {
     this.query = data
   }
 
-  setData(data) {
-    this.reqPath = this.path
+  getRequestContext(data) {
+    // 创建请求上下文，包含需要隔离的关键参数
+    const context = {
+      data: { ...(data ?? {}) },
+      reqPath: this.path
+    }
+
+    // 处理路径参数替换
     if (this.path.indexOf('{') > 0 || this.path.indexOf('[') > 0) {
       // 拼接参数
       for (let k in data) {
-        this.reqPath = this.reqPath.replace(`{${k}}`, data[k])
-        this.reqPath = this.reqPath.replace(`[${k}]`, data[k])
+        context.reqPath = context.reqPath.replace(`{${k}}`, data[k])
+        context.reqPath = context.reqPath.replace(`[${k}]`, data[k])
       }
     }
+
+    // 处理query参数
     if (this.query) {
-      // 拼接 query
-      this.reqPath = lr.url.build(this.reqPath, this.query)
+      // 拼接 query - 简化处理，直接拼接
+      const queryString = Object.keys(this.query)
+        .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(this.query[key])}`)
+        .join('&')
+      context.reqPath += (context.reqPath.includes('?') ? '&' : '?') + queryString
     }
-    this.data = { ...(data ?? {}) }
+
+    return context
   }
 }
 

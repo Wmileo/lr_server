@@ -21,6 +21,9 @@ class Fetch {
   }
 
   fetchStep1(api, data) {
+    // 为每个请求创建独立的上下文，避免参数冲突
+    const requestContext = api.getRequestContext(data)
+
     api.isSame = true
     let newStr = data ? JSON.stringify(data) : null
     if (newStr != api.oldStr) {
@@ -29,7 +32,7 @@ class Fetch {
       api.isSame = false
     }
     api.oldStr = newStr
-    api.setData(data)
+
     // 判断是否相同参数的请求
     if (api.isSame && api.fetching) {
       // 等待请求
@@ -41,7 +44,7 @@ class Fetch {
       // 加入宏观任务 开始请求
       return new Promise((resolve, reject) =>
         setTimeout(() =>
-          this.fetchStep2(api, data)
+          this.fetchStep2(api, requestContext, data)
             .then(resolve, reject)
             .finally(() => (api.fetching = false))
         )
@@ -49,7 +52,7 @@ class Fetch {
     }
   }
 
-  fetchStep2(api, data) {
+  fetchStep2(api, requestContext, data) {
     if (api.resStr) {
       // 频繁请求返回上次结果
       let res = JSON.parse(api.resStr)
@@ -61,11 +64,11 @@ class Fetch {
       return Promise.reject(api.resErr)
     } else {
       return this.handle.before(api).then(() => {
-        return this[api.type](api)
-          .then((res) => this.fetchStep3(200, res, api, data))
+        return this[api.type](api, requestContext)
+          .then((res) => this.fetchStep3(200, res, api, requestContext, data))
           .catch((err) => {
             if (err.status) {
-              return this.fetchStep3(err.status, err, api, data)
+              return this.fetchStep3(err.status, err, api, requestContext, data)
             } else {
               this.handle.delegate.onError(err, api)
               throw err
@@ -75,7 +78,7 @@ class Fetch {
     }
   }
 
-  fetchStep3(status, res, api, data) {
+  fetchStep3(status, res, api, requestContext, data) {
     return this.handle
       .response(status, res, api, data)
       .then((res) => {
@@ -95,8 +98,8 @@ class Fetch {
       })
   }
 
-  getData(api) {
-    return { ...api.data, ...this.handle.globalData }
+  getData(requestContext) {
+    return { ...requestContext.data, ...this.handle.globalData }
   }
 
   getHeaders(api) {
@@ -108,8 +111,8 @@ class Fetch {
   }
 
   // 请求
-  request(api, opt) {
-    return this.fly[api.method](api.reqPath, this.getData(api), {
+  request(api, requestContext, opt) {
+    return this.fly[api.method](requestContext.reqPath, this.getData(requestContext), {
       ...opt,
       baseURL: api.url || this.handle.url,
       headers: this.getHeaders(api),
@@ -118,13 +121,13 @@ class Fetch {
   }
 
   // unimplemented
-  download(api) {
-    return this.request(api)
+  download(api, requestContext) {
+    return this.request(api, requestContext)
   }
 
   // unimplemented
-  upload(api) {
-    return this.request(api)
+  upload(api, requestContext) {
+    return this.request(api, requestContext)
   }
 }
 

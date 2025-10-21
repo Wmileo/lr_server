@@ -22,12 +22,12 @@ class TestDelegate extends Delegate {
   }
 
   // unimplemented 处理成功请求
-  onSuccess(data, api) {
+  onSuccess(data, api, requestContext) {
     console.log('success')
   }
 
   // unimplemented 处理失败请求
-  onError(err, api) {
+  onError(err, api, requestContext) {
     console.log('error')
   }
 }

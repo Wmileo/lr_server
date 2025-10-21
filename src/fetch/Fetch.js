@@ -56,11 +56,11 @@ class Fetch {
     if (api.resStr) {
       // 频繁请求返回上次结果
       let res = JSON.parse(api.resStr)
-      this.handle.delegate.onSuccess(res, api)
+      this.handle.delegate.onSuccess(res, api, requestContext)
       return Promise.resolve(res)
     } else if (api.resErr) {
       // 频繁请求返回上次结果
-      this.handle.delegate.onError(api.resErr, api)
+      this.handle.delegate.onError(api.resErr, api, requestContext)
       return Promise.reject(api.resErr)
     } else {
       return this.handle.before(api).then(() => {
@@ -70,7 +70,7 @@ class Fetch {
             if (err.status) {
               return this.fetchStep3(err.status, err, api, requestContext, data)
             } else {
-              this.handle.delegate.onError(err, api)
+              this.handle.delegate.onError(err, api, requestContext)
               throw err
             }
           })
@@ -86,7 +86,7 @@ class Fetch {
           api.resStr = JSON.stringify(res)
           setTimeout(() => (api.resStr = null), 1500)
         }
-        this.handle.delegate.onSuccess(res, api)
+        this.handle.delegate.onSuccess(res, api, requestContext)
         return res
       })
       .catch((err) => {

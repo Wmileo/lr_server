@@ -17,10 +17,10 @@ class Delegate {
   }
 
   // unimplemented 处理成功请求
-  onSuccess(data, api) {}
+  onSuccess(data, api, requestContext) {}
 
   // unimplemented 处理失败请求
-  onError(err, api) {}
+  onError(err, api, requestContext) {}
 }
 
 export default Delegate

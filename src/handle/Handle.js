@@ -42,6 +42,7 @@ class Handle {
   response(status, res, api, data) {
     let func = () => {
       if (status != 200) return Promise.reject(res)
+      if (api.type == 'download') return res
       return this.isSuccess(res) || res.success ? this.success(res) : this.fail(res)
     }
     if (this.auth) {
